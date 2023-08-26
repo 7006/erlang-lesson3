@@ -20,5 +20,5 @@ jobs:
           version-file: .github/workflows/.tool-versions
 
       - name: Run eunit tests
-        run: rebar3 eunit -v
+        run: rebar3 eunit
         
