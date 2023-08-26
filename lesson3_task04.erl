@@ -2,6 +2,6 @@
 -export([decode/2]).
 
 decode(JsonText, proplist) ->
-  ok;
+    ok;
 decode(JsonText, map) ->
-  ok.
+    ok.
