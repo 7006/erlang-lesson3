@@ -1,9 +1,9 @@
 -module(lesson3_task01).
 -export([first_word/1]).
 
-% Витягти з рядка перше слово
 -define(is_space(Char), (Char =:= 32)).
 
+% Витягти з рядка перше слово
 first_word(<<Char/utf8, NextChar/utf8, _/binary>>) when
     not ?is_space(Char),
     ?is_space(NextChar)
