@@ -7,24 +7,17 @@
 words(Text) ->
     words(Text, [<<>>]).
 
-words(
-    <<Char/utf8, NextChar/utf8, Text/binary>>,
-    Words
-) when
-    ?is_space(Char),
-    not ?is_space(NextChar)
-->
-    words(
-        Text,
-        [<<NextChar/utf8>> | Words]
-    );
-words(
-    <<Char/utf8, Text/binary>>,
-    [<<Word/binary>> | Words]
-) ->
-    words(
-        Text,
-        [<<Word/binary, Char/utf8>> | Words]
-    );
-words(<<>>, Words) ->
-    lists:reverse(Words).
+words(Text, Words) ->
+    case Text of
+        <<PrevChar/utf8, Char/utf8, RestText/binary>> when
+            ?is_space(PrevChar), not ?is_space(Char)
+        ->
+            NextWords = [<<Char/utf8>> | Words],
+            words(RestText, NextWords);
+        <<Char/utf8, RestText/binary>> ->
+            [<<Chars/binary>> | RestWords] = Words,
+            NextWords = [<<Chars/binary, Char/utf8>> | RestWords],
+            words(RestText, NextWords);
+        <<>> ->
+            lists:reverse(Words)
+    end.
