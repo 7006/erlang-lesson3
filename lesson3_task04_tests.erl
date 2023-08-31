@@ -1,114 +1,54 @@
 -module(lesson3_task04_tests).
--import(lesson3_task04, [decode/2]).
+-import(lesson3_task04, [decode/1]).
 
 -include_lib("eunit/include/eunit.hrl").
 
 decode_test_() ->
-    {
-        setup,
-        fun() ->
-            {ok, JsonText} = file:read_file("squad.json"),
-
-            Proplists = [
-                {<<"squadName">>, <<"Super hero squad">>},
-                {<<"homeTown">>, <<"Metro City">>},
-                {<<"formed">>, 2016},
-                {<<"secretBase">>, <<"Super tower">>},
-                {<<"active">>, true},
-                {<<"members">>, [
-                    [
-                        {<<"name">>, <<"Molecule Man">>},
-                        {<<"age">>, 29},
-                        {<<"secretIdentity">>, <<"Dan Jukes">>},
-                        {<<"powers">>, [
-                            <<"Radiation resistance">>,
-                            <<"Turning tiny">>,
-                            <<"Radiation blast">>
-                        ]}
-                    ],
-                    [
-                        {<<"name">>, <<"Madame Uppercut">>},
-                        {<<"age">>, 39},
-                        {<<"secretIdentity">>, <<"Jane Wilson">>},
-                        {<<"powers">>, [
-                            <<"Million tonne punch">>,
-                            <<"Damage resistance">>,
-                            <<"Superhuman reflexes">>
-                        ]}
-                    ],
-                    [
-                        {<<"name">>, <<"Eternal Flame">>},
-                        {<<"age">>, 1000000},
-                        {<<"secretIdentity">>, <<"Unknown">>},
-                        {<<"powers">>, [
-                            <<"Immortality">>,
-                            <<"Heat Immunity">>,
-                            <<"Inferno">>,
-                            <<"Teleportation">>,
-                            <<"Interdimensional travel">>
-                        ]}
-                    ]
-                ]}
-            ],
-
-            Map = #{
-                <<"active">> => true,
-                <<"formed">> => 2016,
-                <<"homeTown">> => <<"Metro City">>,
-                <<"members">> =>
-                    [
-                        #{
-                            <<"age">> => 29,
-                            <<"name">> => <<"Molecule Man">>,
-                            <<"powers">> =>
-                                [
-                                    <<"Radiation resistance">>,
-                                    <<"Turning tiny">>,
-                                    <<"Radiation blast">>
-                                ],
-                            <<"secretIdentity">> => <<"Dan Jukes">>
-                        },
-                        #{
-                            <<"age">> => 39,
-                            <<"name">> => <<"Madame Uppercut">>,
-                            <<"powers">> =>
-                                [
-                                    <<"Million tonne punch">>,
-                                    <<"Damage resistance">>,
-                                    <<"Superhuman reflexes">>
-                                ],
-                            <<"secretIdentity">> => <<"Jane Wilson">>
-                        },
-                        #{
-                            <<"age">> => 1000000,
-                            <<"name">> => <<"Eternal Flame">>,
-                            <<"powers">> =>
-                                [
-                                    <<"Immortality">>,
-                                    <<"Heat Immunity">>,
-                                    <<"Inferno">>,
-                                    <<"Teleportation">>,
-                                    <<"Interdimensional travel">>
-                                ],
-                            <<"secretIdentity">> => <<"Unknown">>
-                        }
-                    ],
-                <<"secretBase">> => <<"Super tower">>,
-                <<"squadName">> => <<"Super hero squad">>
+    [
+        {"it should decode atoms", [
+            {
+                "null",
+                ?_assertEqual(null, decode(<<"null">>))
             },
-
-            {JsonText, Proplists, Map}
-        end,
-        fun({JsonText, Proplists, Map}) ->
-            [
+            {
+                "true",
+                ?_assertEqual(true, decode(<<"true">>))
+            },
+            {
+                "false",
+                ?_assertEqual(false, decode(<<"false">>))
+            }
+        ]},
+        {
+            "it should decode number", [
                 {
-                    "it should decode a JSON text using 'proplists' format",
-                    ?_assertEqual(Proplists, decode(JsonText, proplists))
+                    "zero",
+                    ?_assertEqual(0, decode(<<"0">>))
                 },
                 {
-                    "it should decode a JSON text using 'map' format",
-                    ?_assertEqual(Map, decode(JsonText, map))
+                    "integer",
+                    ?_assertEqual(925, decode(<<"925">>))
+                },
+                {
+                    "negative integer",
+                    ?_assertEqual(-541, decode(<<"-541">>))
+                },
+                {
+                    "float",
+                    ?_assertEqual(12.58, decode(<<"12.58">>))
+                },
+                {
+                    "negative float",
+                    ?_assertEqual(-1.23, decode(<<"-1.23">>))
+                },
+                {
+                    "fraction",
+                    ?_assertEqual(0.63, decode(<<"0.63">>))
+                },
+                {
+                    "negative fraction",
+                    ?_assertEqual(-0.82, decode(<<"-0.82">>))
                 }
             ]
-        end
-    }.
+        }
+    ].
