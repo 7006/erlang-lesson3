@@ -50,5 +50,33 @@ decode_test_() ->
                     ?_assertEqual(-0.82, decode(<<"-0.82">>))
                 }
             ]
+        },
+        {
+            "it should decode string", [
+                {
+                    "empty",
+                    ?_assertEqual(<<"">>, decode(<<"\"\"">>))
+                },
+                {
+                    "lower",
+                    ?_assertEqual(<<"foobar">>, decode(<<"\"foobar\"">>))
+                },
+                {
+                    "upper",
+                    ?_assertEqual(<<"BARBAZ">>, decode(<<"\"BARBAZ\"">>))
+                },
+                {
+                    "digits",
+                    ?_assertEqual(<<"444">>, decode(<<"\"444\"">>))
+                },
+                {
+                    "mixed",
+                    ?_assertEqual(<<"4aBc9">>, decode(<<"\"4aBc9\"">>))
+                },
+                {
+                    "utf8",
+                    ?_assertEqual(<<"південь"/utf8>>, decode(<<$", "південь"/utf8, $">>))
+                }
+            ]
         }
     ].

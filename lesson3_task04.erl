@@ -10,12 +10,22 @@ decode(Bin) when is_binary(Bin) ->
             decode_atom(Bin);
         <<"null">> ->
             decode_atom(Bin);
+        <<$", RestBin/binary>> ->
+            decode_string(RestBin);
         <<C, _/binary>> when C =:= $-; C >= $0, C =< $9 ->
             decode_number(Bin)
     end.
 
 decode_atom(Bin) ->
     binary_to_atom(Bin).
+
+decode_string(Bin) ->
+    decode_string(Bin, <<>>).
+
+decode_string(<<$">>, S) ->
+    S;
+decode_string(<<C/utf8, Bin/binary>>, S) ->
+    decode_string(Bin, <<S/binary, C/utf8>>).
 
 decode_number(Bin) ->
     decode_number(Bin, {integer, <<>>}).
