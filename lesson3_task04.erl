@@ -2,22 +2,27 @@
 -export([decode/1]).
 
 % Написати парсер JSON (має вміти працювати і з map і з proplists)
-decode(Bin) when is_binary(Bin) ->
+decode(Bin) ->
+    case get_token(Bin) of
+        {atom, Atom} ->
+            binary_to_atom(Atom);
+        Token ->
+            Token
+    end.
+
+get_token(Bin) when is_binary(Bin) ->
     case Bin of
-        <<"true">> ->
-            decode_atom(Bin);
-        <<"false">> ->
-            decode_atom(Bin);
-        <<"null">> ->
-            decode_atom(Bin);
+        <<$t, $r, $u, $e>> ->
+            {atom, Bin};
+        <<$f, $a, $l, $s, $e>> ->
+            {atom, Bin};
+        <<$n, $u, $l, $l>> ->
+            {atom, Bin};
         <<$", RestBin/binary>> ->
             decode_string(RestBin);
         <<C, _/binary>> when C =:= $-; C >= $0, C =< $9 ->
             decode_number(Bin)
     end.
-
-decode_atom(Bin) ->
-    binary_to_atom(Bin).
 
 decode_string(Bin) ->
     decode_string(Bin, <<>>).
