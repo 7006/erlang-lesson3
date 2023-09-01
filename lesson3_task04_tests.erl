@@ -28,7 +28,7 @@ decode_test_() ->
         t("array strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
         t("array mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0]),
         t("array nested", [<<"foobar">>, [true, false], [null], 88]),
-        t("array nested_empty", [[], [[]], [[[]]], [[[[]]]]])
+        t("array nested empty", [[], [[]], [[[]]], [[[[]]]]])
     ].
 
 t(Comment, Expected) ->
