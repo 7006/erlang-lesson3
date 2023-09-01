@@ -5,26 +5,37 @@
 
 decode_test_() ->
     [
-        {"it should decode atoms", [
-            {"null", ?_assertEqual(null, decode(<<"null">>))},
-            {"true", ?_assertEqual(true, decode(<<"true">>))},
-            {"false", ?_assertEqual(false, decode(<<"false">>))}
-        ]},
-        {"it should decode number", [
-            {"zero", ?_assertEqual(0, decode(<<"0">>))},
-            {"integer", ?_assertEqual(925, decode(<<"925">>))},
-            {"negative integer", ?_assertEqual(-541, decode(<<"-541">>))},
-            {"float", ?_assertEqual(12.58, decode(<<"12.58">>))},
-            {"negative float", ?_assertEqual(-1.23, decode(<<"-1.23">>))},
-            {"fraction", ?_assertEqual(0.63, decode(<<"0.63">>))},
-            {"negative fraction", ?_assertEqual(-0.82, decode(<<"-0.82">>))}
-        ]},
-        {"it should decode string", [
-            {"empty", ?_assertEqual(<<"">>, decode(<<"\"\"">>))},
-            {"lower", ?_assertEqual(<<"foobar">>, decode(<<"\"foobar\"">>))},
-            {"upper", ?_assertEqual(<<"BARBAZ">>, decode(<<"\"BARBAZ\"">>))},
-            {"digits", ?_assertEqual(<<"444">>, decode(<<"\"444\"">>))},
-            {"mixed", ?_assertEqual(<<"4aBc9">>, decode(<<"\"4aBc9\"">>))},
-            {"utf8", ?_assertEqual(<<"південь"/utf8>>, decode(<<$", "південь"/utf8, $">>))}
-        ]}
+        t("null", null),
+        t("boolean_true", true),
+        t("boolean_false", false),
+        t("number_zero", 0),
+        t("number_integer", 925),
+        t("number_integer_negative", -541),
+        t("number_float", 12.58),
+        t("number_float_negative", -1.23),
+        t("number_fraction", 0.63),
+        t("number_fraction_negative", -0.82),
+        t("string_empty", <<"">>),
+        t("string_lower", <<"foobar">>),
+        t("string_upper", <<"BARBAZ">>),
+        t("string_digits", <<"444">>),
+        t("string_mixed", <<"4aBc9">>),
+        t("string_utf8", <<"південь"/utf8>>)
     ].
+
+t(Name, Expected) ->
+    Comment = string:join(
+        string:replace(Name, "_", " ", all),
+        ""
+    ),
+
+    {ok, Json} = file:read_file(
+        string:join(
+            ["json_examples", "/", Name, ".", "json"],
+            ""
+        )
+    ),
+
+    Test = ?_assertEqual(Expected, decode(Json)),
+
+    {Comment, Test}.
