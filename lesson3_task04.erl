@@ -25,7 +25,7 @@ get_token(Bin) when is_binary(Bin) ->
         <<$", RestBin/binary>> ->
             decode_string(RestBin);
         <<C, _/binary>> when C =:= $-; C >= $0, C =< $9 ->
-            decode_number(Bin)
+            get_number_token(Bin)
     end.
 
 decode_string(Bin) ->
@@ -36,12 +36,12 @@ decode_string(<<$">>, S) ->
 decode_string(<<C/utf8, Bin/binary>>, S) ->
     decode_string(Bin, <<S/binary, C/utf8>>).
 
-decode_number(Bin) ->
-    decode_number(Bin, {integer, <<>>}).
+get_number_token(Bin) ->
+    get_number_token(Bin, {integer, <<>>}).
 
-decode_number(<<$., _/binary>> = Bin, {integer, Num}) ->
-    decode_number(Bin, {float, Num});
-decode_number(<<N:1/binary, Bin/binary>>, {Fn, Num}) ->
-    decode_number(Bin, {Fn, <<Num/binary, N/binary>>});
-decode_number(<<>>, Token) ->
+get_number_token(<<$., _/binary>> = Bin, {integer, Num}) ->
+    get_number_token(Bin, {float, Num});
+get_number_token(<<N:1/binary, Bin/binary>>, {Fn, Num}) ->
+    get_number_token(Bin, {Fn, <<Num/binary, N/binary>>});
+get_number_token(<<>>, Token) ->
     Token.
