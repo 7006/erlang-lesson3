@@ -6,40 +6,40 @@
 decode_test_() ->
     [
         t("null", null),
-        t("boolean_true", true),
-        t("boolean_false", false),
-        t("number_zero", 0),
-        t("number_integer", 925),
-        t("number_integer_negative", -541),
-        t("number_float", 12.58),
-        t("number_float_negative", -1.23),
-        t("number_fraction", 0.63),
-        t("number_fraction_negative", -0.82),
-        t("string_empty", <<"">>),
-        t("string_lower", <<"foobar">>),
-        t("string_upper", <<"BARBAZ">>),
-        t("string_digits", <<"444">>),
-        t("string_mixed", <<"4aBc9">>),
-        t("string_utf8", <<"південь"/utf8>>),
-        t("array_empty", []),
-        t("array_booleans", [true, false, true]),
-        t("array_null", [null, null, null]),
-        t("array_numbers", [999, -20, 5.36, -108.99, 0, 0.81, -0.256]),
-        t("array_strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
-        t("array_mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0]),
-        t("array_nested", [<<"foobar">>, [true, false], [null], 88]),
-        t("array_nested_empty", [[], [[]], [[[]]], [[[[]]]]])
+        t("boolean true", true),
+        t("boolean false", false),
+        t("number zero", 0),
+        t("number integer", 925),
+        t("number integer negative", -541),
+        t("number float", 12.58),
+        t("number float negative", -1.23),
+        t("number fraction", 0.63),
+        t("number fraction negative", -0.82),
+        t("string empty", <<"">>),
+        t("string lower", <<"foobar">>),
+        t("string upper", <<"BARBAZ">>),
+        t("string digits", <<"444">>),
+        t("string mixed", <<"4aBc9">>),
+        t("string utf8", <<"південь"/utf8>>),
+        t("array empty", []),
+        t("array booleans", [true, false, true]),
+        t("array null", [null, null, null]),
+        t("array numbers", [999, -20, 5.36, -108.99, 0, 0.81, -0.256]),
+        t("array strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
+        t("array mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0]),
+        t("array nested", [<<"foobar">>, [true, false], [null], 88]),
+        t("array nested_empty", [[], [[]], [[[]]], [[[[]]]]])
     ].
 
-t(Name, Expected) ->
-    Comment = string:join(
-        string:replace(Name, "_", " ", all),
+t(Comment, Expected) ->
+    Basename = string:join(
+        string:replace(Comment, " ", "_", all),
         ""
     ),
 
     {ok, Json} = file:read_file(
         string:join(
-            ["json_examples", "/", Name, ".", "json"],
+            ["json_examples", "/", Basename, ".", "json"],
             ""
         )
     ),
