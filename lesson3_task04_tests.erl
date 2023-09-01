@@ -20,7 +20,15 @@ decode_test_() ->
         t("string_upper", <<"BARBAZ">>),
         t("string_digits", <<"444">>),
         t("string_mixed", <<"4aBc9">>),
-        t("string_utf8", <<"південь"/utf8>>)
+        t("string_utf8", <<"південь"/utf8>>),
+        t("array_empty", []),
+        t("array_booleans", [true, false, true]),
+        t("array_null", [null, null, null]),
+        t("array_numbers", [999, -20, 5.36, -108.99, 0, 0.81, -0.256]),
+        t("array_strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
+        t("array_mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0]),
+        t("array_nested", [<<"foobar">>, [true, false], [null], 88]),
+        t("array_nested_empty", [[], [[]], [[[]]], [[[[]]]]])
     ].
 
 t(Name, Expected) ->
