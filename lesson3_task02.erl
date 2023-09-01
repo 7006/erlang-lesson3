@@ -1,7 +1,7 @@
 -module(lesson3_task02).
 -export([words/1]).
 
--define(is_space(Char), (Char =:= 32)).
+-define(is_space(Char), (Char =:= $\s)).
 
 % Розділити рядок на слова
 words(Text) ->
