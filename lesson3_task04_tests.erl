@@ -37,12 +37,12 @@ t(Comment, Expected) ->
         ""
     ),
 
-    {ok, Json} = file:read_file(
-        string:join(
-            ["json_examples", "/", Basename, ".", "json"],
-            ""
-        )
+    Filename = string:join(
+        ["json_examples", "/", Basename, ".", "json"],
+        ""
     ),
+
+    {ok, Json} = file:read_file(Filename),
 
     Test = ?_assertEqual(Expected, decode(Json)),
 
