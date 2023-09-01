@@ -6,6 +6,10 @@ decode(Bin) ->
     case get_token(Bin) of
         {atom, Atom} ->
             binary_to_atom(Atom);
+        {integer, Integer} ->
+            binary_to_integer(Integer);
+        {float, Float} ->
+            binary_to_float(Float);
         Token ->
             Token
     end.
@@ -39,7 +43,5 @@ decode_number(<<$., _/binary>> = Bin, {integer, Num}) ->
     decode_number(Bin, {float, Num});
 decode_number(<<N:1/binary, Bin/binary>>, {Fn, Num}) ->
     decode_number(Bin, {Fn, <<Num/binary, N/binary>>});
-decode_number(<<>>, {integer, Num}) ->
-    binary_to_integer(Num);
-decode_number(<<>>, {float, Num}) ->
-    binary_to_float(Num).
+decode_number(<<>>, Token) ->
+    Token.
