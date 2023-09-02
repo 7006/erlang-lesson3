@@ -1,4 +1,5 @@
 -module(lesson3_task04).
+
 -export([decode/1]).
 
 -define(is_whitespace(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).

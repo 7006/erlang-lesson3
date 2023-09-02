@@ -1,4 +1,5 @@
 -module(lesson3_task01_tests).
+
 -import(lesson3_task01, [first_word/1]).
 
 -include_lib("eunit/include/eunit.hrl").

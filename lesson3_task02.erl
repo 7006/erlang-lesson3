@@ -1,4 +1,5 @@
 -module(lesson3_task02).
+
 -export([words/1]).
 
 -define(is_space(Char), (Char =:= $\s)).
