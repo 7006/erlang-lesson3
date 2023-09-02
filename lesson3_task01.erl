@@ -2,7 +2,7 @@
 
 -export([first_word/1]).
 
-% Витягти з рядка перше слово
+%% Витягти з рядка перше слово
 first_word(Text) ->
     first_word(Text, <<>>).
 
