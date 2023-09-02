@@ -28,6 +28,9 @@ get_token(Bin) when is_binary(Bin) ->
             get_number_token(Bin)
     end.
 
+%% ----------------------------------------------------------------------------
+%% get_string_token
+%% ----------------------------------------------------------------------------
 get_string_token(Bin) ->
     get_string_token(Bin, <<>>).
 
@@ -36,6 +39,9 @@ get_string_token(<<$">>, S) ->
 get_string_token(<<C/utf8, Bin/binary>>, S) ->
     get_string_token(Bin, <<S/binary, C/utf8>>).
 
+%% ----------------------------------------------------------------------------
+%% get_number_token
+%% ----------------------------------------------------------------------------
 get_number_token(Bin) ->
     get_number_token(Bin, {integer, <<>>}).
 
