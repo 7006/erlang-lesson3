@@ -93,8 +93,8 @@ get_number_token(Bin) ->
 
 get_number_token(Bin, {Type, Number}) ->
     case Bin of
-        <<Digit, RestBin/binary>> when Digit =:= $. andalso Type =:= integer ->
-            get_number_token(RestBin, {float, <<Number/binary, Digit>>});
+        <<$., RestBin/binary>> when Type =:= integer ->
+            get_number_token(RestBin, {float, <<Number/binary, $.>>});
         <<C, _/binary>> when ?is_digit(C) ->
             <<Digit:1/binary, RestBin/binary>> = Bin,
             get_number_token(RestBin, {Type, <<Number/binary, Digit/binary>>});
