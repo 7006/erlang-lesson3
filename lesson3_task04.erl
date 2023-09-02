@@ -23,18 +23,18 @@ get_token(Bin) when is_binary(Bin) ->
         <<$n, $u, $l, $l>> ->
             {atom, Bin};
         <<$", RestBin/binary>> ->
-            decode_string(RestBin);
+            get_string_token(RestBin);
         <<Digit, _/binary>> when Digit =:= $-; Digit >= $0, Digit =< $9 ->
             get_number_token(Bin)
     end.
 
-decode_string(Bin) ->
-    decode_string(Bin, <<>>).
+get_string_token(Bin) ->
+    get_string_token(Bin, <<>>).
 
-decode_string(<<$">>, S) ->
+get_string_token(<<$">>, S) ->
     S;
-decode_string(<<C/utf8, Bin/binary>>, S) ->
-    decode_string(Bin, <<S/binary, C/utf8>>).
+get_string_token(<<C/utf8, Bin/binary>>, S) ->
+    get_string_token(Bin, <<S/binary, C/utf8>>).
 
 get_number_token(Bin) ->
     get_number_token(Bin, {integer, <<>>}).
