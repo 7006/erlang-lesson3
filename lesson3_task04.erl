@@ -4,12 +4,14 @@
 % Написати парсер JSON (має вміти працювати і з map і з proplists)
 decode(Bin) ->
     case get_token(Bin) of
-        {atom, Atom} ->
-            binary_to_atom(Atom);
-        {integer, Integer} ->
-            binary_to_integer(Integer);
-        {float, Float} ->
-            binary_to_float(Float);
+        {atom, Val} ->
+            binary_to_atom(Val);
+        {integer, Val} ->
+            binary_to_integer(Val);
+        {float, Val} ->
+            binary_to_float(Val);
+        {string, Val} ->
+            Val;
         Token ->
             Token
     end.
@@ -34,10 +36,13 @@ get_token(Bin) when is_binary(Bin) ->
 get_string_token(Bin) ->
     get_string_token(Bin, <<>>).
 
-get_string_token(<<$">>, S) ->
-    S;
-get_string_token(<<C/utf8, Bin/binary>>, S) ->
-    get_string_token(Bin, <<S/binary, C/utf8>>).
+get_string_token(Bin, Chars) ->
+    case Bin of
+        <<$">> ->
+            {string, Chars};
+        <<Char/utf8, RestBin/binary>> ->
+            get_string_token(RestBin, <<Chars/binary, Char/utf8>>)
+    end.
 
 %% ----------------------------------------------------------------------------
 %% get_number_token
