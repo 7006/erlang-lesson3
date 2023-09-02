@@ -5,10 +5,10 @@
 % Витягти з рядка перше слово
 first_word(Text) ->
     case Text of
-        <<PrevChar/utf8, Char/utf8, _/binary>> when PrevChar =/= $\s, Char =:= $\s ->
-            <<PrevChar/utf8>>;
-        <<Char/utf8, RestText/binary>> ->
-            <<Char/utf8, (first_word(RestText))/binary>>;
+        <<Character/utf8, $\s, _/binary>> when Character =/= $\s ->
+            <<Character/utf8>>;
+        <<Character/utf8, RestText/binary>> ->
+            <<Character/utf8, (first_word(RestText))/binary>>;
         <<>> ->
             <<>>
     end.
