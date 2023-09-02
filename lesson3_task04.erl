@@ -17,10 +17,8 @@ decode(Bin) ->
         {string, String, <<>>} ->
             String;
         {array_start, Array} ->
-            case decode_array(Array) of
-                {array_done, Array2, <<>>} ->
-                    Array2
-            end
+            {array_done, Array2, <<>>} = decode_array(Array),
+            Array2
     end.
 
 %% ----------------------------------------------------------------------------
@@ -32,31 +30,20 @@ decode_array(Bin) ->
 decode_array(Bin, Array) ->
     case get_token(Bin) of
         {array_end, RestBin} ->
-            io:format(user, "~n array_end ~p ~p~n", [RestBin, Array]),
             {array_done, lists:reverse(Array), RestBin};
         {comma, RestBin} ->
-            io:format(user, "~n decode_array comma ~p ~p~n", [RestBin, Array]),
             decode_array(RestBin, Array);
         {atom, Atom, RestBin} ->
-            io:format(user, "~n decode_array atom ~p ~p ~p~n", [Atom, RestBin, Array]),
             decode_array(RestBin, [Atom | Array]);
         {integer, Integer, RestBin} ->
-            io:format(user, "~n decode_array integer ~p ~p ~p~n", [Integer, RestBin, Array]),
             decode_array(RestBin, [Integer | Array]);
         {float, Float, RestBin} ->
-            io:format(user, "~n decode_array float ~p ~p ~p~n", [Float, RestBin, Array]),
             decode_array(RestBin, [Float | Array]);
         {string, String, RestBin} ->
-            io:format(user, "~n decode_array string ~p ~p ~p~n", [String, RestBin, Array]),
             decode_array(RestBin, [String | Array]);
         {array_start, RestBin} ->
-            io:format(user, "~n decode_array array_start ~p ~p~n", [RestBin, Array]),
-            case decode_array(RestBin) of
-                {array_done, Array2, RestBin2} ->
-                    decode_array(RestBin2, [Array2 | Array])
-            end;
-        All ->
-            io:format(user, "~n decode_array CATCHALL ~p~n", [All])
+            {array_done, Array2, RestBin2} = decode_array(RestBin),
+            decode_array(RestBin2, [Array2 | Array])
     end.
 
 %% ----------------------------------------------------------------------------
@@ -111,9 +98,7 @@ get_number_token(Bin, {Type, Number}) ->
         <<C, _/binary>> when ?is_digit(C) ->
             <<Digit:1/binary, RestBin/binary>> = Bin,
             get_number_token(RestBin, {Type, <<Number/binary, Digit/binary>>});
-        All ->
-            io:format(user, "~n~n get_number_token CATCHALL ~p ~p ~p ~p~n", [Bin, Type, Number, All]),
-
+        _ ->
             Number2 =
                 case Type of
                     integer ->
