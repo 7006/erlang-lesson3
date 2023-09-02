@@ -1,0 +1,12 @@
+{
+	"task_id": 4758,
+	"subtask_ids": [
+		1084,
+		1102,
+		1103
+	],
+	"affected_releases": [
+		"BGT/12",
+		"LAG/2"
+	]
+}
