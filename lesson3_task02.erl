@@ -2,17 +2,13 @@
 
 -export([words/1]).
 
--define(is_space(Char), (Char =:= $\s)).
-
 % Розділити рядок на слова
 words(Text) ->
     words(Text, [<<>>]).
 
 words(Text, Words) ->
     case Text of
-        <<PrevChar/utf8, Char/utf8, RestText/binary>> when
-            ?is_space(PrevChar), not ?is_space(Char)
-        ->
+        <<PrevChar/utf8, Char/utf8, RestText/binary>> when PrevChar =:= $\s, Char =/= $\s ->
             NextWords = [<<Char/utf8>> | Words],
             words(RestText, NextWords);
         <<Char/utf8, RestText/binary>> ->
