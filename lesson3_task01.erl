@@ -8,8 +8,7 @@ first_word(Text) ->
         <<PrevChar/utf8, Char/utf8, _/binary>> when PrevChar =/= $\s, Char =:= $\s ->
             <<PrevChar/utf8>>;
         <<Char/utf8, RestText/binary>> ->
-            NextText = first_word(RestText),
-            <<Char/utf8, NextText/binary>>;
+            <<Char/utf8, (first_word(RestText))/binary>>;
         <<>> ->
             <<>>
     end.
