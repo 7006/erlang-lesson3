@@ -99,7 +99,7 @@ get_number_token(Bin, {Type, Number}) ->
             <<Digit:1/binary, RestBin/binary>> = Bin,
             get_number_token(RestBin, {Type, <<Number/binary, Digit/binary>>});
         _ ->
-            Number2 =
+            Num =
                 case Type of
                     integer ->
                         binary_to_integer(Number);
@@ -107,5 +107,5 @@ get_number_token(Bin, {Type, Number}) ->
                         binary_to_float(Number)
                 end,
 
-            {Type, Number2, Bin}
+            {Type, Num, Bin}
     end.
