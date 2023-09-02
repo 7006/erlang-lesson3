@@ -16,9 +16,9 @@ decode(Bin) ->
             Float;
         {string, String, <<>>} ->
             String;
-        {array_start, Array} ->
-            {array_done, Array2, <<>>} = decode_array(Array),
-            Array2
+        {array_start, RestBin} ->
+            {array_done, Array, <<>>} = decode_array(RestBin),
+            Array
     end.
 
 %% ----------------------------------------------------------------------------
