@@ -1,6 +1,10 @@
 -module(lesson3_task04).
 -export([decode/1]).
 
+-define(is_white_space(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).
+
+-define(is_digit(C), (C =:= $- orelse C >= $0 andalso C =< $9)).
+
 % Написати парсер JSON (має вміти працювати і з map і з proplists)
 decode(Bin) ->
     case get_token(Bin) of
@@ -19,17 +23,25 @@ decode(Bin) ->
 %% ----------------------------------------------------------------------------
 get_token(Bin) when is_binary(Bin) ->
     case Bin of
-        <<$t, $r, $u, $e>> ->
-            {atom, Bin};
-        <<$f, $a, $l, $s, $e>> ->
-            {atom, Bin};
-        <<$n, $u, $l, $l>> ->
-            {atom, Bin};
+        <<C, RestBin/binary>> when ?is_white_space(C) ->
+            get_token(RestBin);
+        <<"true">> ->
+            get_atom_token(Bin);
+        <<"false">> ->
+            get_atom_token(Bin);
+        <<"null">> ->
+            get_atom_token(Bin);
         <<$", RestBin/binary>> ->
             get_string_token(RestBin);
-        <<Digit, _/binary>> when Digit =:= $-; Digit >= $0, Digit =< $9 ->
+        <<C, _/binary>> when ?is_digit(C) ->
             get_number_token(Bin)
     end.
+
+%% ----------------------------------------------------------------------------
+%% get_atom_token
+%% ----------------------------------------------------------------------------
+get_atom_token(Bin) ->
+    {atom, Bin}.
 
 %% ----------------------------------------------------------------------------
 %% get_string_token

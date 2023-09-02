@@ -5,6 +5,7 @@
 
 decode_test_() ->
     [
+        t("white space", null),
         t("null", null),
         t("boolean true", true),
         t("boolean false", false),
