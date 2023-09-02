@@ -1,7 +1,5 @@
 -module(lesson3_task04_tests).
 
--import(lesson3_task04, [decode/1]).
-
 -include_lib("eunit/include/eunit.hrl").
 
 decode_test_() ->
@@ -71,6 +69,6 @@ t(Comment, Expected) ->
 
     {ok, Json} = file:read_file(Filename),
 
-    Test = ?_assertEqual(Expected, decode(Json)),
+    Test = ?_assertEqual(Expected, lesson3_task04:decode(Json)),
 
     {Comment, Test}.

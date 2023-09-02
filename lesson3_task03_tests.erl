@@ -1,7 +1,5 @@
 -module(lesson3_task03_tests).
 
--import(lesson3_task03, [split/2]).
-
 -include_lib("eunit/include/eunit.hrl").
 
 split_test_() ->
@@ -16,7 +14,7 @@ split_test_() ->
                     <<"Col4">>,
                     <<"Col5">>
                 ],
-                split(<<"Col1-:-Col2-:-Col3-:-Col4-:-Col5">>, "-:-")
+                lesson3_task03:split(<<"Col1-:-Col2-:-Col3-:-Col4-:-Col5">>, "-:-")
             )
         },
         {
@@ -29,7 +27,7 @@ split_test_() ->
                     <<"Стовпчик4"/utf8>>,
                     <<"Стовпчик5"/utf8>>
                 ],
-                split(
+                lesson3_task03:split(
                     <<"Стовпчик1-:-Стовпчик2-:-Стовпчик3-:-Стовпчик4-:-Стовпчик5"/utf8>>,
                     "-:-"
                 )
@@ -39,7 +37,7 @@ split_test_() ->
             "it should split an empty text to the words using a string delimiter",
             ?_assertEqual(
                 [<<"">>],
-                split(<<"">>, "-:-")
+                lesson3_task03:split(<<"">>, "-:-")
             )
         }
     ].
