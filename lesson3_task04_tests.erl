@@ -39,7 +39,7 @@ t(Comment, Expected) ->
     ),
 
     Filename = string:join(
-        ["json_examples", "/", Basename, ".", "json"],
+        ["json_documents", "/", Basename, ".", "json"],
         ""
     ),
 
