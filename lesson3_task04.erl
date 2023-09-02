@@ -1,7 +1,7 @@
 -module(lesson3_task04).
 -export([decode/1]).
 
--define(is_white_space(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).
+-define(is_whitespace(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).
 
 -define(is_digit(C), (C =:= $- orelse C >= $0 andalso C =< $9)).
 
@@ -23,7 +23,7 @@ decode(Bin) ->
 %% ----------------------------------------------------------------------------
 get_token(Bin) when is_binary(Bin) ->
     case Bin of
-        <<C, RestBin/binary>> when ?is_white_space(C) ->
+        <<C, RestBin/binary>> when ?is_whitespace(C) ->
             get_token(RestBin);
         <<"true">> ->
             get_atom_token(Bin);

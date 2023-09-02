@@ -5,7 +5,6 @@
 
 decode_test_() ->
     [
-        t("white space", null),
         t("null", null),
         t("boolean true", true),
         t("boolean false", false),
@@ -21,7 +20,8 @@ decode_test_() ->
         t("string upper", <<"BARBAZ">>),
         t("string digits", <<"444">>),
         t("string mixed", <<"4aBc9">>),
-        t("string utf8", <<"південь"/utf8>>)
+        t("string utf8", <<"південь"/utf8>>),
+        t("whitespace", <<"skip whitespace characters">>)
         % t("array empty", []),
         % t("array booleans", [true, false, true]),
         % t("array null", [null, null, null]),
