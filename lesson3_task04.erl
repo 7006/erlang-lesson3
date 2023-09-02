@@ -24,7 +24,7 @@ get_token(Bin) when is_binary(Bin) ->
             {atom, Bin};
         <<$", RestBin/binary>> ->
             decode_string(RestBin);
-        <<C, _/binary>> when C =:= $-; C >= $0, C =< $9 ->
+        <<Digit, _/binary>> when Digit =:= $-; Digit >= $0, Digit =< $9 ->
             get_number_token(Bin)
     end.
 
@@ -39,9 +39,12 @@ decode_string(<<C/utf8, Bin/binary>>, S) ->
 get_number_token(Bin) ->
     get_number_token(Bin, {integer, <<>>}).
 
-get_number_token(<<$., _/binary>> = Bin, {integer, Num}) ->
-    get_number_token(Bin, {float, Num});
-get_number_token(<<N:1/binary, Bin/binary>>, {Fn, Num}) ->
-    get_number_token(Bin, {Fn, <<Num/binary, N/binary>>});
-get_number_token(<<>>, Token) ->
-    Token.
+get_number_token(Bin, {Type, Number}) ->
+    case Bin of
+        <<Digit, RestBin/binary>> when Digit =:= $. andalso Type =:= integer ->
+            get_number_token(RestBin, {float, <<Number/binary, Digit>>});
+        <<Digit:1/binary, RestBin/binary>> ->
+            get_number_token(RestBin, {Type, <<Number/binary, Digit/binary>>});
+        <<>> ->
+            {Type, Number}
+    end.
