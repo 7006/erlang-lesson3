@@ -17,7 +17,7 @@ decode(Bin) ->
         {string, String, <<>>} ->
             String;
         {array_start, RestBin} ->
-            {array_done, Array, <<>>} = decode_array(RestBin),
+            {Array, <<>>} = decode_array(RestBin),
             Array
     end.
 
@@ -29,8 +29,8 @@ decode_array(Bin) ->
 
 decode_array(Bin, Array) ->
     case get_token(Bin) of
-        {array_end, RestBin} ->
-            {array_done, lists:reverse(Array), RestBin};
+        {array_end, NextBin} ->
+            {lists:reverse(Array), NextBin};
         {comma, RestBin} ->
             decode_array(RestBin, Array);
         {atom, Atom, RestBin} ->
@@ -42,8 +42,8 @@ decode_array(Bin, Array) ->
         {string, String, RestBin} ->
             decode_array(RestBin, [String | Array]);
         {array_start, RestBin} ->
-            {array_done, Array2, RestBin2} = decode_array(RestBin),
-            decode_array(RestBin2, [Array2 | Array])
+            {NestedArray, NextBin} = decode_array(RestBin),
+            decode_array(NextBin, [NestedArray | Array])
     end.
 
 %% ----------------------------------------------------------------------------
