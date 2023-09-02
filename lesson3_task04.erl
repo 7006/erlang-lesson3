@@ -14,7 +14,7 @@ decode(Bin) ->
             Integer;
         {float, Float, <<>>} ->
             Float;
-        {string, String} ->
+        {string, String, <<>>} ->
             String;
         {array_start, Array} ->
             decode_array(Array)
@@ -32,17 +32,20 @@ decode_array(Bin, Array) ->
             io:format(user, "~n array_end ~p ~p~n", [RestBin, Array]),
             lists:reverse(Array);
         {comma, RestBin} ->
-            io:format(user, "~n comma ~p ~p~n", [RestBin, Array]),
+            io:format(user, "~n decode_array comma ~p ~p~n", [RestBin, Array]),
             decode_array(RestBin, Array);
         {atom, Atom, RestBin} ->
-            io:format(user, "~n atom ~p ~p ~p~n", [Atom, RestBin, Array]),
+            io:format(user, "~n decode_array atom ~p ~p ~p~n", [Atom, RestBin, Array]),
             decode_array(RestBin, [Atom | Array]);
         {integer, Integer, RestBin} ->
-            io:format(user, "~n integer ~p ~p ~p~n", [Integer, RestBin, Array]),
+            io:format(user, "~n decode_array integer ~p ~p ~p~n", [Integer, RestBin, Array]),
             decode_array(RestBin, [Integer | Array]);
         {float, Float, RestBin} ->
-            io:format(user, "~n float ~p ~p ~p~n", [Float, RestBin, Array]),
+            io:format(user, "~n decode_array float ~p ~p ~p~n", [Float, RestBin, Array]),
             decode_array(RestBin, [Float | Array]);
+        {string, String, RestBin} ->
+            io:format(user, "~n decode_array string ~p ~p ~p~n", [String, RestBin, Array]),
+            decode_array(RestBin, [String | Array]);
         All ->
             io:format(user, "~n decode_array CATCHALL ~p~n", [All])
     end.
@@ -80,8 +83,8 @@ get_string_token(Bin) ->
 
 get_string_token(Bin, Chars) ->
     case Bin of
-        <<$">> ->
-            {string, Chars};
+        <<$", RestBin/binary>> ->
+            {string, Chars, RestBin};
         <<Char/utf8, RestBin/binary>> ->
             get_string_token(RestBin, <<Chars/binary, Char/utf8>>)
     end.
