@@ -11,11 +11,12 @@ decode(Bin) ->
         {float, Val} ->
             binary_to_float(Val);
         {string, Val} ->
-            Val;
-        Token ->
-            Token
+            Val
     end.
 
+%% ----------------------------------------------------------------------------
+%% get_token
+%% ----------------------------------------------------------------------------
 get_token(Bin) when is_binary(Bin) ->
     case Bin of
         <<$t, $r, $u, $e>> ->
