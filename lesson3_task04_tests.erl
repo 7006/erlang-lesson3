@@ -27,9 +27,9 @@ decode_test_() ->
         t("array null", [null, null, null]),
         t("array numbers", [999, -20, 5.36, -108.99, 0, 0.81, -0.256]),
         t("array strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
-        t("array mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0, false, true, null, -22, -0.5])
-        % t("array nested", [<<"foobar">>, [true, false], [null], 88]),
-        % t("array nested empty", [[], [[]], [[[]]], [[[[]]]]])
+        t("array mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0, false, true, null, -22, -0.5]),
+        t("array nested", [<<"foobar">>, [true, false], [null], 88]),
+        t("array nested empty", [[], [[]], [[[]]], [[[[]]]]])
     ].
 
 t(Comment, Expected) ->

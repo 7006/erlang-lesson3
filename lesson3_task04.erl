@@ -17,7 +17,10 @@ decode(Bin) ->
         {string, String, <<>>} ->
             String;
         {array_start, Array} ->
-            decode_array(Array)
+            case decode_array(Array) of
+                {array_done, Array2, <<>>} ->
+                    Array2
+            end
     end.
 
 %% ----------------------------------------------------------------------------
@@ -30,7 +33,7 @@ decode_array(Bin, Array) ->
     case get_token(Bin) of
         {array_end, RestBin} ->
             io:format(user, "~n array_end ~p ~p~n", [RestBin, Array]),
-            lists:reverse(Array);
+            {array_done, lists:reverse(Array), RestBin};
         {comma, RestBin} ->
             io:format(user, "~n decode_array comma ~p ~p~n", [RestBin, Array]),
             decode_array(RestBin, Array);
@@ -46,6 +49,12 @@ decode_array(Bin, Array) ->
         {string, String, RestBin} ->
             io:format(user, "~n decode_array string ~p ~p ~p~n", [String, RestBin, Array]),
             decode_array(RestBin, [String | Array]);
+        {array_start, RestBin} ->
+            io:format(user, "~n decode_array array_start ~p ~p~n", [RestBin, Array]),
+            case decode_array(RestBin) of
+                {array_done, Array2, RestBin2} ->
+                    decode_array(RestBin2, [Array2 | Array])
+            end;
         All ->
             io:format(user, "~n decode_array CATCHALL ~p~n", [All])
     end.
