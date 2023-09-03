@@ -3,21 +3,17 @@
 -export([split/2]).
 
 %% Розділити рядок на частини з явною вказівкою роздільника
-split(Text, Delimiter) ->
-    DelimiterBin = list_to_binary(Delimiter),
-    DelimiterSize = byte_size(DelimiterBin),
-    <<DelimiterInt:DelimiterSize/binary>> = DelimiterBin,
-    split(Text, [<<>>], DelimiterInt, DelimiterSize).
+split(Text, DelimiterString) ->
+    DelimiterBin = <<<<Char/utf8>> || Char <- DelimiterString>>,
+    Delimiter = {DelimiterBin, byte_size(DelimiterBin)},
+    split(Text, Delimiter, [<<>>]).
 
-split(Text, Words, DelimiterInt, DelimiterSize) ->
+split(Text, {Bin, Size} = Delimiter, [<<Word/binary>> | RestWords] = Words) ->
     case Text of
-        <<DelimiterInt:DelimiterSize/binary, Char/utf8, RestText/binary>> ->
-            NextWords = [<<Char/utf8>> | Words],
-            split(RestText, NextWords, DelimiterInt, DelimiterSize);
+        <<Bin:Size/binary, Char/utf8, RestText/binary>> ->
+            split(RestText, Delimiter, [<<Char/utf8>> | Words]);
         <<Char/utf8, RestText/binary>> ->
-            [<<Chars/binary>> | RestWords] = Words,
-            NextWords = [<<Chars/binary, Char/utf8>> | RestWords],
-            split(RestText, NextWords, DelimiterInt, DelimiterSize);
+            split(RestText, Delimiter, [<<Word/binary, Char/utf8>> | RestWords]);
         <<>> ->
             reverse(Words)
     end.
