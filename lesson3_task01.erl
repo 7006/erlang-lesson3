@@ -6,9 +6,13 @@
 first_word(Text) ->
     first_word(Text, <<>>).
 
+first_word(<<>>, <<>>) ->
+    none;
 first_word(Text, Word) ->
     case Text of
-        <<Char/utf8, $\s, _/binary>> when Char =/= $\s ->
+        <<$\s, RestText/binary>> ->
+            first_word(RestText, Word);
+        <<Char/utf8, $\s, _/binary>> ->
             first_word(<<>>, <<Word/binary, Char/utf8>>);
         <<Char/utf8, RestText/binary>> ->
             first_word(RestText, <<Word/binary, Char/utf8>>);

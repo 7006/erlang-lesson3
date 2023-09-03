@@ -12,31 +12,40 @@ first_word_test_() ->
             )
         },
         {
+            "it should get a first word for ascii text with whitespace prefix",
+            ?_assertEqual(
+                <<"Some">>,
+                lesson3_task01:first_word(<<"    Some Text">>)
+            )
+        },
+
+        {
+            "it should get a first word for a one-word ascii text",
+            ?_assertEqual(
+                <<"foobar">>,
+                lesson3_task01:first_word(<<"foobar">>)
+            )
+        },
+        {
+            "it should get a first word for a one-character ascii text",
+            ?_assertEqual(
+                <<"a">>,
+                lesson3_task01:first_word(<<"a">>)
+            )
+        },
+        {
             "it should get a first word for utf8 text",
             ?_assertEqual(
                 <<"Якийсь"/utf8>>,
                 lesson3_task01:first_word(<<"Якийсь текст"/utf8>>)
             )
         },
+
         {
-            "it should get a first word for ascii text with spaces at the beginning",
+            "it should get a first word for utf8 text with whitespace prefix",
             ?_assertEqual(
-                <<"    Some">>,
-                lesson3_task01:first_word(<<"    Some Text">>)
-            )
-        },
-        {
-            "it should get a first word for utf8 text with spaces at the beginning",
-            ?_assertEqual(
-                <<"    Якийсь"/utf8>>,
+                <<"Якийсь"/utf8>>,
                 lesson3_task01:first_word(<<"    Якийсь текст"/utf8>>)
-            )
-        },
-        {
-            "it should get a first word for a one-word ascii text",
-            ?_assertEqual(
-                <<"foobar">>,
-                lesson3_task01:first_word(<<"foobar">>)
             )
         },
         {
@@ -46,11 +55,26 @@ first_word_test_() ->
                 lesson3_task01:first_word(<<"гіроскоп"/utf8>>)
             )
         },
+
         {
-            "it should get an empty string for an empty string",
+            "it should get a first word for a one-character utf8 text",
             ?_assertEqual(
-                <<"">>,
-                lesson3_task01:first_word(<<"">>)
+                <<"і"/utf8>>,
+                lesson3_task01:first_word(<<"і"/utf8>>)
+            )
+        },
+        {
+            "it should get none for an empty string",
+            ?_assertEqual(
+                none,
+                lesson3_task01:first_word(<<>>)
+            )
+        },
+        {
+            "it should get none for a blank string",
+            ?_assertEqual(
+                none,
+                lesson3_task01:first_word(<<"    ">>)
             )
         }
     ].
