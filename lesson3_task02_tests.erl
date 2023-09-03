@@ -57,7 +57,7 @@ words_test_() ->
             "it should get words from ascii text separated by whitespace with a whitespace suffix",
             ?_assertEqual(
                 [<<"Текст"/utf8>>, <<"з"/utf8>>, <<"чотирьох"/utf8>>, <<"слів"/utf8>>],
-                lesson3_task02:words(<<"    Текст з чотирьох слів    "/utf8>>)
+                lesson3_task02:words(<<"Текст з чотирьох слів    "/utf8>>)
             )
         },
         {
