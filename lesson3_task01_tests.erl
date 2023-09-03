@@ -42,7 +42,7 @@ first_word_test_() ->
         {
             "it should get a first word for a one-word utf8 text",
             ?_assertEqual(
-                <<"гіроскоп">>,
+                <<"гіроскоп"/utf8>>,
                 lesson3_task01:first_word(<<"гіроскоп"/utf8>>)
             )
         },
