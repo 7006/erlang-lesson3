@@ -9,12 +9,10 @@ words(Text) ->
 words(Text, Words) ->
     case Text of
         <<$\s, Char/utf8, RestText/binary>> when Char =/= $\s ->
-            NextWords = [<<Char/utf8>> | Words],
-            words(RestText, NextWords);
+            words(RestText, [<<Char/utf8>> | Words]);
         <<Char/utf8, RestText/binary>> ->
             [<<Chars/binary>> | RestWords] = Words,
-            NextWords = [<<Chars/binary, Char/utf8>> | RestWords],
-            words(RestText, NextWords);
+            words(RestText, [<<Chars/binary, Char/utf8>> | RestWords]);
         <<>> ->
             reverse(Words)
     end.
