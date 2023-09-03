@@ -33,6 +33,20 @@ first_word_test_() ->
             )
         },
         {
+            "it should get a first word for a one-word ascii text",
+            ?_assertEqual(
+                <<"foobar">>,
+                lesson3_task01:first_word(<<"foobar">>)
+            )
+        },
+        {
+            "it should get a first word for a one-word utf8 text",
+            ?_assertEqual(
+                <<"гіроскоп">>,
+                lesson3_task01:first_word(<<"гіроскоп"/utf8>>)
+            )
+        },
+        {
             "it should get a empty string for an empty string",
             ?_assertEqual(
                 <<"">>,
