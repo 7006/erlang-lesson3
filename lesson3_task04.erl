@@ -31,7 +31,7 @@ decode_array(Bin) ->
 decode_array(Bin, Array) ->
     case get_token(Bin) of
         {array_end, NextBin} ->
-            {lists:reverse(Array), NextBin};
+            {lesson3_lists:reverse(Array), NextBin};
         {comma, RestBin} ->
             decode_array(RestBin, Array);
         {atom, Atom, RestBin} ->

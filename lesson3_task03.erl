@@ -19,18 +19,10 @@ split(Text, [<<Word/binary>> | RestWords] = Words, {Bin, Size} = Delimiter) ->
         <<Char/utf8, RestText/binary>> ->
             split(RestText, [<<Word/binary, Char/utf8>> | RestWords], Delimiter);
         <<>> ->
-            reverse(Words)
+            lesson3_lists:reverse(Words)
     end.
 
 convert_delimiter(String) ->
     Bin = <<<<Int/integer>> || Int <- String>>,
     Size = byte_size(Bin),
     {Bin, Size}.
-
-reverse(L) ->
-    reverse(L, []).
-
-reverse([H | T], Acc) ->
-    reverse(T, [H | Acc]);
-reverse([], Acc) ->
-    Acc.

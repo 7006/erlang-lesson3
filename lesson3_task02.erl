@@ -13,13 +13,5 @@ words(Text, [<<Word/binary>> | RestWords] = Words) ->
         <<Char/utf8, RestText/binary>> ->
             words(RestText, [<<Word/binary, Char/utf8>> | RestWords]);
         <<>> ->
-            reverse(Words)
+            lesson3_lists:reverse(Words)
     end.
-
-reverse(L) ->
-    reverse(L, []).
-
-reverse([H | T], Acc) ->
-    reverse(T, [H | Acc]);
-reverse([], Acc) ->
-    Acc.
