@@ -11,8 +11,8 @@ words(Text, Words) ->
         <<$\s, Char/utf8, RestText/binary>> when Char =/= $\s ->
             words(RestText, [<<Char/utf8>> | Words]);
         <<Char/utf8, RestText/binary>> ->
-            [<<Chars/binary>> | RestWords] = Words,
-            words(RestText, [<<Chars/binary, Char/utf8>> | RestWords]);
+            [<<Word/binary>> | RestWords] = Words,
+            words(RestText, [<<Word/binary, Char/utf8>> | RestWords]);
         <<>> ->
             reverse(Words)
     end.
