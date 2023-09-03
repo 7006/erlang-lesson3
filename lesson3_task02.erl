@@ -16,5 +16,13 @@ words(Text, Words) ->
             NextWords = [<<Chars/binary, Char/utf8>> | RestWords],
             words(RestText, NextWords);
         <<>> ->
-            lists:reverse(Words)
+            reverse(Words)
     end.
+
+reverse(L) ->
+    reverse(L, []).
+
+reverse([H | T], Acc) ->
+    reverse(T, [H | Acc]);
+reverse([], Acc) ->
+    Acc.
