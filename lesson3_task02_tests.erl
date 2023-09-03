@@ -5,45 +5,73 @@
 words_test_() ->
     [
         {
-            "it should split ascii text to the words using a space character as a separator",
+            "it should get words from ascii text separated by whitespace",
             ?_assertEqual(
                 [<<"Text">>, <<"with">>, <<"four">>, <<"words">>],
                 lesson3_task02:words(<<"Text with four words">>)
             )
         },
         {
-            "it should split utf8 text to the words using a space character as a separator",
+            "it should get words from ascii text separated by mixed count of whitespaces",
+            ?_assertEqual(
+                [<<"Text">>, <<"with">>, <<"four">>, <<"words">>],
+                lesson3_task02:words(<<"Text with  four    words">>)
+            )
+        },
+        {
+            "it should get words from ascii text separated by whitespace with a whitespace prefix",
+            ?_assertEqual(
+                [<<"Text">>, <<"with">>, <<"four">>, <<"words">>],
+                lesson3_task02:words(<<"    Text with four words">>)
+            )
+        },
+        {
+            "it should get words from ascii text separated by whitespace with a whitespace suffix",
+            ?_assertEqual(
+                [<<"Text">>, <<"with">>, <<"four">>, <<"words">>],
+                lesson3_task02:words(<<"Text with four words    ">>)
+            )
+        },
+        {
+            "it should get words from utf8 text separated by whitespace",
             ?_assertEqual(
                 [<<"Текст"/utf8>>, <<"з"/utf8>>, <<"чотирьох"/utf8>>, <<"слів"/utf8>>],
                 lesson3_task02:words(<<"Текст з чотирьох слів"/utf8>>)
             )
         },
         {
-            "it should get a one-element list for one-word ascii text using a space character as a separator",
+            "it should get words from utf8 text separated by mixed count of whitespaces",
             ?_assertEqual(
-                [<<"Text">>],
-                lesson3_task02:words(<<"Text">>)
+                [<<"Текст"/utf8>>, <<"з"/utf8>>, <<"чотирьох"/utf8>>, <<"слів"/utf8>>],
+                lesson3_task02:words(<<"Текст з  чотирьох   слів"/utf8>>)
             )
         },
         {
-            "it should get a one-element list for one-word utf8 text using a space character as a separator",
+            "it should get words from utf8 text separated by whitespace with a whitespace prefix",
             ?_assertEqual(
-                [<<"Текст"/utf8>>],
-                lesson3_task02:words(<<"Текст"/utf8>>)
+                [<<"Текст"/utf8>>, <<"з"/utf8>>, <<"чотирьох"/utf8>>, <<"слів"/utf8>>],
+                lesson3_task02:words(<<"    Текст з чотирьох слів"/utf8>>)
             )
         },
         {
-            "it should get a one-element list with an empty string for an empty string",
+            "it should get words from ascii text separated by whitespace with a whitespace suffix",
             ?_assertEqual(
-                [<<"">>],
-                lesson3_task02:words(<<"">>)
+                [<<"Текст"/utf8>>, <<"з"/utf8>>, <<"чотирьох"/utf8>>, <<"слів"/utf8>>],
+                lesson3_task02:words(<<"    Текст з чотирьох слів    "/utf8>>)
             )
         },
         {
-            "it should get a one-element list with a 5-character blank string for a 5-character blank string",
+            "it should get 0 words from empty text",
             ?_assertEqual(
-                [<<"     ">>],
-                lesson3_task02:words(<<"     ">>)
+                [],
+                lesson3_task02:words(<<>>)
+            )
+        },
+        {
+            "it should get 0 words from blank text",
+            ?_assertEqual(
+                [],
+                lesson3_task02:words(<<"    ">>)
             )
         }
     ].

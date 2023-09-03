@@ -4,14 +4,20 @@
 
 %% Розділити рядок на слова
 words(Text) ->
-    words(Text, [<<>>]).
+    words(Text, <<>>, []).
 
-words(Text, [<<Word/binary>> | RestWords] = Words) ->
+words(<<>>, <<>>, Words) ->
+    lesson3_lists:reverse(Words);
+words(<<>>, Word, Words) ->
+    words(<<>>, <<>>, [Word | Words]);
+words(Text, <<Word/binary>>, Words) ->
     case Text of
-        <<$\s, Char/utf8, RestText/binary>> when Char =/= $\s ->
-            words(RestText, [<<Char/utf8>> | Words]);
+        <<$\s, RestText/binary>> ->
+            words(RestText, Word, Words);
+        <<Char/utf8, $\s, RestText/binary>> ->
+            words(RestText, <<>>, [<<Word/binary, Char/utf8>> | Words]);
         <<Char/utf8, RestText/binary>> ->
-            words(RestText, [<<Word/binary, Char/utf8>> | RestWords]);
+            words(RestText, <<Word/binary, Char/utf8>>, Words);
         <<>> ->
-            lesson3_lists:reverse(Words)
+            words(<<>>, Word, Words)
     end.
