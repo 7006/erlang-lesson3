@@ -18,12 +18,18 @@ first_word_test_() ->
                 lesson3_task01:first_word(<<"    Some Text">>)
             )
         },
-
         {
             "it should get a first word for a one-word ascii text",
             ?_assertEqual(
                 <<"foobar">>,
                 lesson3_task01:first_word(<<"foobar">>)
+            )
+        },
+        {
+            "it should get a first word for a one-word ascii text with whitespace prefix",
+            ?_assertEqual(
+                <<"foobar">>,
+                lesson3_task01:first_word(<<"          foobar">>)
             )
         },
         {
@@ -34,13 +40,19 @@ first_word_test_() ->
             )
         },
         {
+            "it should get a first word for a one-character ascii text with whitespace prefix",
+            ?_assertEqual(
+                <<"a">>,
+                lesson3_task01:first_word(<<"          a">>)
+            )
+        },
+        {
             "it should get a first word for utf8 text",
             ?_assertEqual(
                 <<"Якийсь"/utf8>>,
                 lesson3_task01:first_word(<<"Якийсь текст"/utf8>>)
             )
         },
-
         {
             "it should get a first word for utf8 text with whitespace prefix",
             ?_assertEqual(
@@ -55,12 +67,25 @@ first_word_test_() ->
                 lesson3_task01:first_word(<<"гіроскоп"/utf8>>)
             )
         },
-
+        {
+            "it should get a first word for a one-word utf8 text with whitespace prefix",
+            ?_assertEqual(
+                <<"гіроскоп"/utf8>>,
+                lesson3_task01:first_word(<<"          гіроскоп"/utf8>>)
+            )
+        },
         {
             "it should get a first word for a one-character utf8 text",
             ?_assertEqual(
                 <<"і"/utf8>>,
                 lesson3_task01:first_word(<<"і"/utf8>>)
+            )
+        },
+        {
+            "it should get a first word for a one-character utf8 text with whitespace prefix",
+            ?_assertEqual(
+                <<"і"/utf8>>,
+                lesson3_task01:first_word(<<"          і"/utf8>>)
             )
         },
         {
