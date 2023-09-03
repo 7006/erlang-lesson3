@@ -2,7 +2,7 @@
 
 -export([split/2]).
 
-% Розділити рядок на частини з явною вказівкою роздільника
+%% Розділити рядок на частини з явною вказівкою роздільника
 split(Text, Delimiter) ->
     DelimiterBin = list_to_binary(Delimiter),
     DelimiterSize = byte_size(DelimiterBin),
