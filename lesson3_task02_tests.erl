@@ -33,7 +33,7 @@ words_test_() ->
             )
         },
         {
-            "it should get a one-element list with empty string for an empty string",
+            "it should get a one-element list with an empty string for an empty string",
             ?_assertEqual(
                 [<<"">>],
                 lesson3_task02:words(<<"">>)
