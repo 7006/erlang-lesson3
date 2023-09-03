@@ -47,7 +47,7 @@ first_word_test_() ->
             )
         },
         {
-            "it should get a empty string for an empty string",
+            "it should get an empty string for an empty string",
             ?_assertEqual(
                 <<"">>,
                 lesson3_task01:first_word(<<"">>)
