@@ -23,7 +23,7 @@ split(Text, [<<Word/binary>> | RestWords] = Words, {Bin, Size} = Delimiter) ->
     end.
 
 convert_delimiter(String) ->
-    Bin = <<<<Char/utf8>> || Char <- String>>,
+    Bin = <<<<Int/integer>> || Int <- String>>,
     Size = byte_size(Bin),
     {Bin, Size}.
 
