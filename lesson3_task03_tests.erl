@@ -5,7 +5,7 @@
 split_test_() ->
     [
         {
-            "it should split ascii text by by delimiter",
+            "it should split ascii text by delimiter",
             ?_assertEqual(
                 [
                     <<"Col1">>,
