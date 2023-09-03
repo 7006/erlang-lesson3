@@ -14,8 +14,8 @@ first_word_test_() ->
         {
             "it should get a first word for utf8 text",
             ?_assertEqual(
-                <<"Якийсь">>,
-                lesson3_task01:first_word(<<"Якийсь текст">>)
+                <<"Якийсь"/utf8>>,
+                lesson3_task01:first_word(<<"Якийсь текст"/utf8>>)
             )
         },
         {
@@ -28,8 +28,8 @@ first_word_test_() ->
         {
             "it should get a first word for utf8 text with spaces at the beginning",
             ?_assertEqual(
-                <<"    Якийсь">>,
-                lesson3_task01:first_word(<<"    Якийсь текст">>)
+                <<"    Якийсь"/utf8>>,
+                lesson3_task01:first_word(<<"    Якийсь текст"/utf8>>)
             )
         },
         {
