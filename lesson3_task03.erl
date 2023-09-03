@@ -19,5 +19,13 @@ split(Text, Words, DelimiterInt, DelimiterSize) ->
             NextWords = [<<Chars/binary, Char/utf8>> | RestWords],
             split(RestText, NextWords, DelimiterInt, DelimiterSize);
         <<>> ->
-            lists:reverse(Words)
+            reverse(Words)
     end.
+
+reverse(L) ->
+    reverse(L, []).
+
+reverse([H | T], Acc) ->
+    reverse(T, [H | Acc]);
+reverse([], Acc) ->
+    Acc.
