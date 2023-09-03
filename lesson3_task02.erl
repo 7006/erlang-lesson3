@@ -10,10 +10,10 @@ words(Text, <<Word/binary>>, Words) ->
     case Text of
         <<$\s, RestText/binary>> ->
             words(RestText, Word, Words);
-        <<Char/utf8, $\s, RestText/binary>> ->
-            words(RestText, <<>>, [<<Word/binary, Char/utf8>> | Words]);
         <<Char/utf8>> ->
             words(<<>>, <<>>, [<<Word/binary, Char/utf8>> | Words]);
+        <<Char/utf8, $\s, RestText/binary>> ->
+            words(RestText, <<>>, [<<Word/binary, Char/utf8>> | Words]);
         <<Char/utf8, RestText/binary>> ->
             words(RestText, <<Word/binary, Char/utf8>>, Words);
         <<>> ->
