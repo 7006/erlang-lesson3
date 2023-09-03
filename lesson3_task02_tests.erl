@@ -38,5 +38,12 @@ words_test_() ->
                 [<<"">>],
                 lesson3_task02:words(<<"">>)
             )
+        },
+        {
+            "it should get a one-element list with a 5-character blank string for a 5-character blank string",
+            ?_assertEqual(
+                [<<"     ">>],
+                lesson3_task02:words(<<"     ">>)
+            )
         }
     ].
