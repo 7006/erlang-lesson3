@@ -3,13 +3,13 @@
 -export([split/2]).
 
 %% Розділити рядок на частини з явною вказівкою роздільника
+split(Text, "") ->
+    [Text];
 split(Text, Delimiter) ->
     split(Text, [<<>>], convert_delimiter(Delimiter)).
 
 split(Text, [<<Word/binary>> | RestWords] = Words, {Bin, Size} = Delimiter) ->
     case Text of
-        <<_/binary>> when Size =:= 0 ->
-            [Text];
         <<Bin:Size/binary, Bin:Size/binary, RestText/binary>> ->
             split(<<Bin:Size/binary, RestText/binary>>, [<<>> | Words], Delimiter);
         <<Bin:Size/binary>> ->
