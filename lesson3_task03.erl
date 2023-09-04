@@ -12,8 +12,8 @@ split(Text, [<<Word/binary>> | RestWords] = Words, {Bin, Size} = Delimiter) ->
             [Text];
         <<Bin:Size/binary, Bin:Size/binary, RestText/binary>> ->
             split(<<Bin:Size/binary, RestText/binary>>, [<<>> | Words], Delimiter);
-        <<Bin:Size/binary, RestText/binary>> ->
-            split(<<RestText/binary>>, [<<>> | Words], Delimiter);
+        <<Bin:Size/binary>> ->
+            split(<<>>, [<<>> | Words], Delimiter);
         <<Bin:Size/binary, Char/utf8, RestText/binary>> ->
             split(RestText, [<<Char/utf8>> | Words], Delimiter);
         <<Char/utf8, RestText/binary>> ->
