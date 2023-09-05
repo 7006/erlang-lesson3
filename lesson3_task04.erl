@@ -17,7 +17,7 @@ decode(Text) ->
             Float;
         {string, String, <<>>} ->
             String;
-        {array_start, RestText} ->
+        {enter_array, RestText} ->
             {Array, <<>>} = decode_array(RestText),
             Array
     end.
@@ -30,7 +30,7 @@ decode_array(Text) ->
 
 decode_array(Text, Array) ->
     case get_token(Text) of
-        {array_end, NextText} ->
+        {exit_array, NextText} ->
             {lesson3_lists:reverse(Array), NextText};
         {comma, RestText} ->
             decode_array(RestText, Array);
@@ -42,7 +42,7 @@ decode_array(Text, Array) ->
             decode_array(RestText, [Float | Array]);
         {string, String, RestText} ->
             decode_array(RestText, [String | Array]);
-        {array_start, RestText} ->
+        {enter_array, RestText} ->
             {NestedArray, NextText} = decode_array(RestText),
             decode_array(NextText, [NestedArray | Array])
     end.
@@ -55,9 +55,9 @@ get_token(Text) ->
         <<C, RestText/binary>> when ?is_whitespace(C) ->
             get_token(RestText);
         <<"[", RestText/binary>> ->
-            {array_start, RestText};
+            {enter_array, RestText};
         <<"]", RestText/binary>> ->
-            {array_end, RestText};
+            {exit_array, RestText};
         <<",", RestText/binary>> ->
             {comma, RestText};
         <<"true", RestText/binary>> ->
