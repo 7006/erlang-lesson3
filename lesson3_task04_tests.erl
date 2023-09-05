@@ -236,17 +236,17 @@ decode_test_() ->
         })
     ].
 
-t(ObjectHandler, Comment, Expected) ->
+t(ObjectHandler, Description, Expected) ->
     {
-        Comment,
+        string:join(["<", atom_to_list(ObjectHandler), "> ", Description], ""),
         ?_assertEqual(
             Expected,
-            lesson3_task04:decode(read_json_document(Comment), ObjectHandler)
+            lesson3_task04:decode(read_json_document(Description), ObjectHandler)
         )
     }.
 
-read_json_document(Comment) ->
-    Basename = string:join(string:replace(Comment, " ", "_", all), ""),
+read_json_document(Description) ->
+    Basename = string:join(string:replace(Description, " ", "_", all), ""),
     Filename = string:join(["json_documents", "/", Basename, ".", "json"], ""),
     {ok, Json} = file:read_file(Filename),
     Json.
