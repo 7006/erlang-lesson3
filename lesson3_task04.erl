@@ -6,7 +6,9 @@
 
 -define(is_digit(C), (C =:= $- orelse C >= $0 andalso C =< $9)).
 
-% Написати парсер JSON (має вміти працювати і з map і з proplists)
+%% Написати парсер JSON
+%% має вміти працювати з map
+%% має вміти працювати з proplists
 decode(Text) ->
     case get_token(Text) of
         {value, V, <<>>} ->
