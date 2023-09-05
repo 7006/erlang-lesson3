@@ -21,4 +21,6 @@ jobs:
 
       - name: Syntax check of json documents used to test the json decoder
         run: make check-json-documents
-  
+
+      - name: Run eunit tests
+        run: rebar3 eunit
