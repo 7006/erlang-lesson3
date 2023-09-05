@@ -4,32 +4,34 @@
 
 decode_test_() ->
     [
-        t("null", null),
-        t("boolean true", true),
-        t("boolean false", false),
-        t("number zero", 0),
-        t("number integer", 925),
-        t("number integer negative", -541),
-        t("number float", 12.58),
-        t("number float negative", -1.23),
-        t("number fraction", 0.63),
-        t("number fraction negative", -0.82),
-        t("string empty", <<"">>),
-        t("string lower", <<"foobar">>),
-        t("string upper", <<"BARBAZ">>),
-        t("string digits", <<"444">>),
-        t("string mixed", <<"4aBc9">>),
-        t("string utf8", <<"південь"/utf8>>),
-        t("whitespace", <<"skip whitespace characters">>),
-        t("array empty", []),
-        t("array booleans", [true, false, true]),
-        t("array null", [null, null, null]),
-        t("array numbers", [999, -20, 5.36, -108.99, 0, 0.81, -0.256]),
-        t("array strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
-        t("array mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0, false, true, null, -22, -0.5]),
-        t("array nested", [<<"foobar">>, [true, false], [null], 88]),
-        t("array nested empty", [[], [[]], [[[]]], [[[[]]]]]),
-        t("array_nested_object", [
+        t(proplists, "null", null),
+        t(proplists, "boolean true", true),
+        t(proplists, "boolean false", false),
+        t(proplists, "number zero", 0),
+        t(proplists, "number integer", 925),
+        t(proplists, "number integer negative", -541),
+        t(proplists, "number float", 12.58),
+        t(proplists, "number float negative", -1.23),
+        t(proplists, "number fraction", 0.63),
+        t(proplists, "number fraction negative", -0.82),
+        t(proplists, "string empty", <<"">>),
+        t(proplists, "string lower", <<"foobar">>),
+        t(proplists, "string upper", <<"BARBAZ">>),
+        t(proplists, "string digits", <<"444">>),
+        t(proplists, "string mixed", <<"4aBc9">>),
+        t(proplists, "string utf8", <<"південь"/utf8>>),
+        t(proplists, "whitespace", <<"skip whitespace characters">>),
+        t(proplists, "array empty", []),
+        t(proplists, "array booleans", [true, false, true]),
+        t(proplists, "array null", [null, null, null]),
+        t(proplists, "array numbers", [999, -20, 5.36, -108.99, 0, 0.81, -0.256]),
+        t(proplists, "array strings", [<<"abc">>, <<"DEF">>, <<"hIjK">>, <<"">>, <<"1111">>]),
+        t(proplists, "array mixed", [
+            1, <<"foobar">>, <<"QuuX">>, 0.38, 0, false, true, null, -22, -0.5
+        ]),
+        t(proplists, "array nested", [<<"foobar">>, [true, false], [null], 88]),
+        t(proplists, "array nested empty", [[], [[]], [[[]]], [[[[]]]]]),
+        t(proplists, "array_nested_object", [
             [
                 {<<"a">>, 1},
                 {<<"b">>, 2}
@@ -39,15 +41,15 @@ decode_test_() ->
                 {<<"y">>, <<"yyy">>}
             ]
         ]),
-        t("object empty", []),
-        t("object pair single", [
+        t(proplists, "object empty", []),
+        t(proplists, "object pair single", [
             {<<"enabled">>, true}
         ]),
-        t("object pairs two", [
+        t(proplists, "object pairs two", [
             {<<"enabled">>, false},
             {<<"is_new">>, true}
         ]),
-        t("object pairs mixed", [
+        t(proplists, "object pairs mixed", [
             {<<"available">>, true},
             {<<"model">>, <<"T-1000">>},
             {<<"parts">>, null},
@@ -55,12 +57,12 @@ decode_test_() ->
             {<<"price">>, 10.27},
             {<<"rating">>, 0.8}
         ]),
-        t("object pairs array", [
+        t(proplists, "object pairs array", [
             {<<"task_id">>, 4758},
             {<<"subtask_ids">>, [1084, 1102, 1103]},
             {<<"affected_releases">>, [<<"BGT/12">>, <<"LAG/2">>]}
         ]),
-        t("object pairs nested object", [
+        t(proplists, "object pairs nested object", [
             {<<"a">>, 1},
             {<<"b">>, [
                 {<<"aa">>, true},
@@ -76,7 +78,7 @@ decode_test_() ->
                 ]}
             ]}
         ]),
-        t("squad", [
+        t(proplists, "squad", [
             {<<"squadName">>, <<"Super hero squad">>},
             {<<"homeTown">>, <<"Metro City">>},
             {<<"formed">>, 2016},
@@ -119,10 +121,14 @@ decode_test_() ->
         ])
     ].
 
-t(Comment, Expected) ->
-    Text = read_json_document(Comment),
-    Test = ?_assertEqual(Expected, lesson3_task04:decode(Text, proplists)),
-    {Comment, Test}.
+t(ObjectHandler, Comment, Expected) ->
+    {
+        Comment,
+        ?_assertEqual(
+            Expected,
+            lesson3_task04:decode(read_json_document(Comment), ObjectHandler)
+        )
+    }.
 
 read_json_document(Comment) ->
     Basename = string:join(string:replace(Comment, " ", "_", all), ""),
