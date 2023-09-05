@@ -52,8 +52,9 @@ decode_object(Text, Object, Key, Value, ObjectHandler) ->
         {exit_object, RestText} when Key =:= no_key, Value =:= no_value ->
             {Object, RestText};
         {exit_object, RestText} when Key =/= no_key, Value =/= no_value ->
-            NextObject = ObjectHandler:done(Key, Value, Object),
-            {NextObject, RestText}
+            NextObject = ObjectHandler:put(Key, Value, Object),
+            NextObject2 = ObjectHandler:done(NextObject),
+            {NextObject2, RestText}
     end.
 
 %% ----------------------------------------------------------------------------
