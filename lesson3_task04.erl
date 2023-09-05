@@ -31,23 +31,20 @@ decode_object(Text, Object, Key, Value) ->
             decode_object(RestText, Object, K, no_value);
         {colon, RestText} when Key =/= no_key ->
             decode_object(RestText, Object, Key, no_value);
-        {value, V, RestText} when Key =/= no_key, Value =:= no_value ->
-            decode_object(RestText, Object, Key, V);
+        {value, Val, RestText} when Key =/= no_key, Value =:= no_value ->
+            decode_object(RestText, Object, Key, Val);
         {enter_array, RestText} when Key =/= no_key, Value =:= no_value ->
-            {V, NextText} = decode_array(RestText),
-            decode_object(NextText, Object, Key, V);
+            {Array, NextText} = decode_array(RestText),
+            decode_object(NextText, Object, Key, Array);
         {enter_object, RestText} when Key =/= no_key, Value =:= no_value ->
-            {V, NextText} = decode_object(RestText),
-            decode_object(NextText, Object, Key, V);
+            {NestedObject, NextText} = decode_object(RestText),
+            decode_object(NextText, Object, Key, NestedObject);
         {comma, RestText} when Key =/= no_key, Value =/= no_value ->
-            Object1 = [{Key, Value} | Object],
-            decode_object(RestText, Object1, no_key, no_value);
+            decode_object(RestText, [{Key, Value} | Object], no_key, no_value);
         {exit_object, RestText} when Key =:= no_key, Value =:= no_value ->
             {Object, RestText};
         {exit_object, RestText} when Key =/= no_key, Value =/= no_value ->
-            Object1 = [{Key, Value} | Object],
-            Object2 = lists:reverse(Object1),
-            {Object2, RestText}
+            {lists:reverse([{Key, Value} | Object]), RestText}
     end.
 
 %% ----------------------------------------------------------------------------
