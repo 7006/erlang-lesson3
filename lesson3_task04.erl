@@ -7,8 +7,8 @@
 -define(is_digit(C), (C =:= $- orelse C >= $0 andalso C =< $9)).
 
 % Написати парсер JSON (має вміти працювати і з map і з proplists)
-decode(Bin) ->
-    case get_token(Bin) of
+decode(Text) ->
+    case get_token(Text) of
         {atom, Atom, <<>>} ->
             Atom;
         {integer, Integer, <<>>} ->
@@ -17,88 +17,88 @@ decode(Bin) ->
             Float;
         {string, String, <<>>} ->
             String;
-        {array_start, RestBin} ->
-            {Array, <<>>} = decode_array(RestBin),
+        {array_start, RestText} ->
+            {Array, <<>>} = decode_array(RestText),
             Array
     end.
 
 %% ----------------------------------------------------------------------------
 %% decode_array
 %% ----------------------------------------------------------------------------
-decode_array(Bin) ->
-    decode_array(Bin, []).
+decode_array(Text) ->
+    decode_array(Text, []).
 
-decode_array(Bin, Array) ->
-    case get_token(Bin) of
-        {array_end, NextBin} ->
-            {lesson3_lists:reverse(Array), NextBin};
-        {comma, RestBin} ->
-            decode_array(RestBin, Array);
-        {atom, Atom, RestBin} ->
-            decode_array(RestBin, [Atom | Array]);
-        {integer, Integer, RestBin} ->
-            decode_array(RestBin, [Integer | Array]);
-        {float, Float, RestBin} ->
-            decode_array(RestBin, [Float | Array]);
-        {string, String, RestBin} ->
-            decode_array(RestBin, [String | Array]);
-        {array_start, RestBin} ->
-            {NestedArray, NextBin} = decode_array(RestBin),
-            decode_array(NextBin, [NestedArray | Array])
+decode_array(Text, Array) ->
+    case get_token(Text) of
+        {array_end, NextText} ->
+            {lesson3_lists:reverse(Array), NextText};
+        {comma, RestText} ->
+            decode_array(RestText, Array);
+        {atom, Atom, RestText} ->
+            decode_array(RestText, [Atom | Array]);
+        {integer, Integer, RestText} ->
+            decode_array(RestText, [Integer | Array]);
+        {float, Float, RestText} ->
+            decode_array(RestText, [Float | Array]);
+        {string, String, RestText} ->
+            decode_array(RestText, [String | Array]);
+        {array_start, RestText} ->
+            {NestedArray, NextText} = decode_array(RestText),
+            decode_array(NextText, [NestedArray | Array])
     end.
 
 %% ----------------------------------------------------------------------------
 %% get_token
 %% ----------------------------------------------------------------------------
-get_token(Bin) when is_binary(Bin) ->
-    case Bin of
-        <<C, RestBin/binary>> when ?is_whitespace(C) ->
-            get_token(RestBin);
-        <<"[", RestBin/binary>> ->
-            {array_start, RestBin};
-        <<"]", RestBin/binary>> ->
-            {array_end, RestBin};
-        <<",", RestBin/binary>> ->
-            {comma, RestBin};
-        <<"true", RestBin/binary>> ->
-            {atom, true, RestBin};
-        <<"false", RestBin/binary>> ->
-            {atom, false, RestBin};
-        <<"null", RestBin/binary>> ->
-            {atom, null, RestBin};
-        <<$", RestBin/binary>> ->
-            get_string_token(RestBin);
+get_token(Text) when is_binary(Text) ->
+    case Text of
+        <<C, RestText/binary>> when ?is_whitespace(C) ->
+            get_token(RestText);
+        <<"[", RestText/binary>> ->
+            {array_start, RestText};
+        <<"]", RestText/binary>> ->
+            {array_end, RestText};
+        <<",", RestText/binary>> ->
+            {comma, RestText};
+        <<"true", RestText/binary>> ->
+            {atom, true, RestText};
+        <<"false", RestText/binary>> ->
+            {atom, false, RestText};
+        <<"null", RestText/binary>> ->
+            {atom, null, RestText};
+        <<$", RestText/binary>> ->
+            get_string_token(RestText);
         <<C, _/binary>> when ?is_digit(C) ->
-            get_number_token(Bin)
+            get_number_token(Text)
     end.
 
 %% ----------------------------------------------------------------------------
 %% get_string_token
 %% ----------------------------------------------------------------------------
-get_string_token(Bin) ->
-    get_string_token(Bin, <<>>).
+get_string_token(Text) ->
+    get_string_token(Text, <<>>).
 
-get_string_token(Bin, Chars) ->
-    case Bin of
-        <<$", RestBin/binary>> ->
-            {string, Chars, RestBin};
-        <<Char/utf8, RestBin/binary>> ->
-            get_string_token(RestBin, <<Chars/binary, Char/utf8>>)
+get_string_token(Text, Chars) ->
+    case Text of
+        <<$", RestText/binary>> ->
+            {string, Chars, RestText};
+        <<Char/utf8, RestText/binary>> ->
+            get_string_token(RestText, <<Chars/binary, Char/utf8>>)
     end.
 
 %% ----------------------------------------------------------------------------
 %% get_number_token
 %% ----------------------------------------------------------------------------
-get_number_token(Bin) ->
-    get_number_token(Bin, {integer, <<>>}).
+get_number_token(Text) ->
+    get_number_token(Text, {integer, <<>>}).
 
-get_number_token(Bin, {Type, Number}) ->
-    case Bin of
-        <<$., RestBin/binary>> when Type =:= integer ->
-            get_number_token(RestBin, {float, <<Number/binary, $.>>});
+get_number_token(Text, {Type, Number}) ->
+    case Text of
+        <<$., RestText/binary>> when Type =:= integer ->
+            get_number_token(RestText, {float, <<Number/binary, $.>>});
         <<C, _/binary>> when ?is_digit(C) ->
-            <<Digit:1/binary, RestBin/binary>> = Bin,
-            get_number_token(RestBin, {Type, <<Number/binary, Digit/binary>>});
+            <<Digit:1/binary, RestText/binary>> = Text,
+            get_number_token(RestText, {Type, <<Number/binary, Digit/binary>>});
         _ ->
             Num =
                 case Type of
@@ -108,5 +108,5 @@ get_number_token(Bin, {Type, Number}) ->
                         binary_to_float(Number)
                 end,
 
-            {Type, Num, Bin}
+            {Type, Num, Text}
     end.
