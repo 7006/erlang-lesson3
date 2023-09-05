@@ -19,6 +19,6 @@ jobs:
           version-type: strict
           version-file: .github/workflows/.tool-versions
 
-      - name: Run eunit tests
-        run: rebar3 eunit
-        
+      - name: Syntax check of json documents used to test the json decoder
+        run: make check-json-documents
+  
