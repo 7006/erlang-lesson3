@@ -57,6 +57,9 @@ decode_object(Text, Object, Key1, Value1) ->
         {enter_array, RestText} when Key1 =/= no_key, Value1 =:= no_value ->
             {Array, NextText} = decode_array(RestText),
             decode_object(NextText, Object, Key1, Array);
+        {enter_object, RestText} when Key1 =/= no_key, Value1 =:= no_value ->
+            {NestedObject, NextText} = decode_object(RestText),
+            decode_object(NextText, Object, Key1, NestedObject);
         {comma, RestText} when Key1 =/= no_key, Value1 =/= no_value ->
             % M1 = maps:put(Key1, Value1, M),
             Object1 = [{Key1, Value1} | Object],

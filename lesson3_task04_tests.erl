@@ -59,6 +59,22 @@ decode_test_() ->
             {<<"task_id">>, 4758},
             {<<"subtask_ids">>, [1084, 1102, 1103]},
             {<<"affected_releases">>, [<<"BGT/12">>, <<"LAG/2">>]}
+        ]),
+        t("object pairs nested object", [
+            {<<"a">>, 1},
+            {<<"b">>, [
+                {<<"aa">>, true},
+                {<<"bb">>, [
+                    {<<"aaa">>, 4.23},
+                    {<<"bbb">>, [
+                        {<<"aaaa">>, <<"cccc">>},
+                        {<<"bbbb">>, [
+                            {<<"aaaaa">>, []},
+                            {<<"bbbbb">>, []}
+                        ]}
+                    ]}
+                ]}
+            ]}
         ])
     ].
 
