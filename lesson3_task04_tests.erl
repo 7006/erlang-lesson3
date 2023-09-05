@@ -237,13 +237,12 @@ decode_test_() ->
     ].
 
 t(ObjectHandler, Description, Expected) ->
-    {
-        string:join(["<", atom_to_list(ObjectHandler), "> ", Description], ""),
-        ?_assertEqual(
-            Expected,
-            lesson3_task04:decode(read_json_document(Description), ObjectHandler)
-        )
-    }.
+    Comment = string:join(["<", atom_to_list(ObjectHandler), "> ", Description], ""),
+    Test = ?_assertEqual(
+        Expected,
+        lesson3_task04:decode(read_json_document(Description), ObjectHandler)
+    ),
+    {Comment, Test}.
 
 read_json_document(Description) ->
     Basename = string:join(string:replace(Description, " ", "_", all), ""),
