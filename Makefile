@@ -14,4 +14,4 @@ clean:
 
 .PHONY: compile
 compile:
-	erlc *.erl
+	erlc -pa . *.erl
