@@ -29,6 +29,16 @@ decode_test_() ->
         t("array mixed", [1, <<"foobar">>, <<"QuuX">>, 0.38, 0, false, true, null, -22, -0.5]),
         t("array nested", [<<"foobar">>, [true, false], [null], 88]),
         t("array nested empty", [[], [[]], [[[]]], [[[[]]]]]),
+        t("array_nested_object", [
+            [
+                {<<"a">>, 1},
+                {<<"b">>, 2}
+            ],
+            [
+                {<<"x">>, <<"xxxx">>},
+                {<<"y">>, <<"yyy">>}
+            ]
+        ]),
         t("object empty", []),
         t("object pair single", [
             {<<"enabled">>, true}

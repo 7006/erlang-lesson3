@@ -98,7 +98,10 @@ decode_array(Text, Array) ->
             decode_array(RestText, [Value | Array]);
         {enter_array, RestText} ->
             {NestedArray, NextText} = decode_array(RestText),
-            decode_array(NextText, [NestedArray | Array])
+            decode_array(NextText, [NestedArray | Array]);
+        {enter_object, RestText} ->
+            {NestedObject, NextText} = decode_object(RestText),
+            decode_array(NextText, [NestedObject | Array])
     end.
 
 %% ----------------------------------------------------------------------------
