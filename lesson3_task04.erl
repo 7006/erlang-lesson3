@@ -27,18 +27,18 @@ decode_object(Text) ->
 
 decode_object(Text, Object, Key1, Value1) ->
     case get_token(Text) of
-        {value, Key, RestText} when Key1 =:= no_key, Value1 =:= no_value ->
-            decode_object(RestText, Object, Key, no_value);
+        {value, K, RestText} when Key1 =:= no_key, Value1 =:= no_value ->
+            decode_object(RestText, Object, K, no_value);
         {colon, RestText} when Key1 =/= no_key ->
             decode_object(RestText, Object, Key1, no_value);
-        {value, Value, RestText} when Key1 =/= no_key, Value1 =:= no_value ->
-            decode_object(RestText, Object, Key1, Value);
+        {value, V, RestText} when Key1 =/= no_key, Value1 =:= no_value ->
+            decode_object(RestText, Object, Key1, V);
         {enter_array, RestText} when Key1 =/= no_key, Value1 =:= no_value ->
-            {Array, NextText} = decode_array(RestText),
-            decode_object(NextText, Object, Key1, Array);
+            {V, NextText} = decode_array(RestText),
+            decode_object(NextText, Object, Key1, V);
         {enter_object, RestText} when Key1 =/= no_key, Value1 =:= no_value ->
-            {NestedObject, NextText} = decode_object(RestText),
-            decode_object(NextText, Object, Key1, NestedObject);
+            {V, NextText} = decode_object(RestText),
+            decode_object(NextText, Object, Key1, V);
         {comma, RestText} when Key1 =/= no_key, Value1 =/= no_value ->
             Object1 = [{Key1, Value1} | Object],
             decode_object(RestText, Object1, no_key, no_value);
