@@ -14,5 +14,5 @@ new() ->
 put(Key, Value, Object) ->
     maps:put(Key, Value, Object).
 
-done(Key, Value, Object) ->
+done(Object) ->
     Object.
