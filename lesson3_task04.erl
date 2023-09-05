@@ -9,14 +9,8 @@
 % Написати парсер JSON (має вміти працювати і з map і з proplists)
 decode(Text) ->
     case get_token(Text) of
-        {atom, Atom, <<>>} ->
-            Atom;
-        {integer, Integer, <<>>} ->
-            Integer;
-        {float, Float, <<>>} ->
-            Float;
-        {string, String, <<>>} ->
-            String;
+        {value, V, <<>>} ->
+            V;
         {enter_array, RestText} ->
             {Array, <<>>} = decode_array(RestText),
             Array
@@ -34,14 +28,8 @@ decode_array(Text, Array) ->
             {lesson3_lists:reverse(Array), NextText};
         {comma, RestText} ->
             decode_array(RestText, Array);
-        {atom, Atom, RestText} ->
-            decode_array(RestText, [Atom | Array]);
-        {integer, Integer, RestText} ->
-            decode_array(RestText, [Integer | Array]);
-        {float, Float, RestText} ->
-            decode_array(RestText, [Float | Array]);
-        {string, String, RestText} ->
-            decode_array(RestText, [String | Array]);
+        {value, Value, RestText} ->
+            decode_array(RestText, [Value | Array]);
         {enter_array, RestText} ->
             {NestedArray, NextText} = decode_array(RestText),
             decode_array(NextText, [NestedArray | Array])
@@ -61,11 +49,11 @@ get_token(Text) ->
         <<",", RestText/binary>> ->
             {comma, RestText};
         <<"true", RestText/binary>> ->
-            {atom, true, RestText};
+            {value, true, RestText};
         <<"false", RestText/binary>> ->
-            {atom, false, RestText};
+            {value, false, RestText};
         <<"null", RestText/binary>> ->
-            {atom, null, RestText};
+            {value, null, RestText};
         <<$", RestText/binary>> ->
             get_string_token(RestText);
         <<C, _/binary>> when ?is_digit(C) ->
@@ -81,7 +69,7 @@ get_string_token(Text) ->
 get_string_token(Text, Chars) ->
     case Text of
         <<$", RestText/binary>> ->
-            {string, Chars, RestText};
+            {value, Chars, RestText};
         <<Char/utf8, RestText/binary>> ->
             get_string_token(RestText, <<Chars/binary, Char/utf8>>)
     end.
@@ -108,5 +96,5 @@ get_number_token(Text, {Type, Number}) ->
                         binary_to_float(Number)
                 end,
 
-            {Type, Num, Text}
+            {value, Num, Text}
     end.
