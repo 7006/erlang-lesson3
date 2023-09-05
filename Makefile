@@ -10,7 +10,7 @@ check-json-documents:
 
 .PHONY: clean
 clean:
-	rm -rf .beam
+	rm -rf *.beam
 
 .PHONY: compile
 compile:
