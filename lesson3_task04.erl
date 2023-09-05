@@ -1,6 +1,6 @@
 -module(lesson3_task04).
 
--export([decode/1, decode/2]).
+-export([decode/2]).
 
 -define(is_whitespace(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).
 
@@ -9,9 +9,6 @@
 %% Написати парсер JSON
 %% має вміти працювати з map
 %% має вміти працювати з proplists
-decode(Text) ->
-    decode(Text, proplists).
-
 decode(Text, proplists) ->
     decode(Text, lesson3_task04_object_handler_proplists);
 decode(Text, map) ->
