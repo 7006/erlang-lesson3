@@ -50,7 +50,7 @@ decode_array(Text, Array) ->
 %% ----------------------------------------------------------------------------
 %% get_token
 %% ----------------------------------------------------------------------------
-get_token(Text) when is_binary(Text) ->
+get_token(Text) ->
     case Text of
         <<C, RestText/binary>> when ?is_whitespace(C) ->
             get_token(RestText);
