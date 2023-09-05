@@ -127,23 +127,20 @@ get_string_token(Text, Chars) ->
 %% get_number_token
 %% ----------------------------------------------------------------------------
 get_number_token(Text) ->
-    get_number_token(Text, {integer, <<>>}).
+    get_number_token(Text, 1, 0, no_fraction).
 
-get_number_token(Text, {Type, Number}) ->
+get_number_token(Text, Sign, Number, Decimal) ->
     case Text of
-        <<$., RestText/binary>> when Type =:= integer ->
-            get_number_token(RestText, {float, <<Number/binary, $.>>});
-        <<C, _/binary>> when ?is_digit(C) ->
-            <<Digit:1/binary, RestText/binary>> = Text,
-            get_number_token(RestText, {Type, <<Number/binary, Digit/binary>>});
-        _ ->
-            Num =
-                case Type of
-                    integer ->
-                        binary_to_integer(Number);
-                    float ->
-                        binary_to_float(Number)
-                end,
-
-            {value, Num, Text}
+        <<$-, RestText/binary>> when Sign =/= -1 ->
+            get_number_token(RestText, -1, Number, Decimal);
+        <<Int/integer, RestText/binary>> when ?is_digit(Int), Decimal =:= no_fraction ->
+            get_number_token(RestText, Sign, 10 * Number + (Int - $0), Decimal);
+        <<$., RestText/binary>> when Decimal =:= no_fraction ->
+            get_number_token(RestText, Sign, Number, 1);
+        <<Int/integer, RestText/binary>> when ?is_digit(Int), Decimal =/= no_fraction ->
+            get_number_token(RestText, Sign, 10 * Number + (Int - $0), 10 * Decimal);
+        <<RestText/binary>> when Decimal =/= no_fraction ->
+            {value, Sign * Number / Decimal, RestText};
+        <<RestText/binary>> when Decimal =:= no_fraction ->
+            {value, Sign * Number, RestText}
     end.
