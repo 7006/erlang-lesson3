@@ -14,5 +14,5 @@ new() ->
 put(Key, Value, Object) ->
     [{Key, Value} | Object].
 
-done(Key, Value, Object) ->
-    lesson3_lists:reverse(put(Key, Value, Object)).
+done(Object) ->
+    lesson3_lists:reverse(Object).
