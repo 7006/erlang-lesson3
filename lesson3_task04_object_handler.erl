@@ -4,4 +4,4 @@
 
 -callback put(Key :: binary(), Value :: term(), Object :: term()) -> term().
 
--callback done(Key :: binary(), Value :: term(), Object :: term()) -> term().
+-callback done(Object :: term()) -> term().
