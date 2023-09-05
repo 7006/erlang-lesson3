@@ -120,18 +120,12 @@ decode_test_() ->
     ].
 
 t(Comment, Expected) ->
-    Basename = string:join(
-        string:replace(Comment, " ", "_", all),
-        ""
-    ),
-
-    Filename = string:join(
-        ["json_documents", "/", Basename, ".", "json"],
-        ""
-    ),
-
-    {ok, Json} = file:read_file(Filename),
-
-    Test = ?_assertEqual(Expected, lesson3_task04:decode(Json)),
-
+    Text = read_json_document(Comment),
+    Test = ?_assertEqual(Expected, lesson3_task04:decode(Text)),
     {Comment, Test}.
+
+read_json_document(Comment) ->
+    Basename = string:join(string:replace(Comment, " ", "_", all), ""),
+    Filename = string:join(["json_documents", "/", Basename, ".", "json"], ""),
+    {ok, Json} = file:read_file(Filename),
+    Json.
