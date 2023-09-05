@@ -44,7 +44,7 @@ decode_object(Text, Object, Key, Value) ->
         {exit_object, RestText} when Key =:= no_key, Value =:= no_value ->
             {Object, RestText};
         {exit_object, RestText} when Key =/= no_key, Value =/= no_value ->
-            {lists:reverse([{Key, Value} | Object]), RestText}
+            {lesson3_lists:reverse([{Key, Value} | Object]), RestText}
     end.
 
 %% ----------------------------------------------------------------------------
