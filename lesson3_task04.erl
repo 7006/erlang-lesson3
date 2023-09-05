@@ -61,22 +61,24 @@ decode_object(Text, Object, Key, Value, ObjectHandler) ->
 %% decode_array
 %% ----------------------------------------------------------------------------
 decode_array(Text, ObjectHandler) ->
-    decode_array(Text, [], ObjectHandler).
+    decode_array(Text, [], no_value, ObjectHandler).
 
-decode_array(Text, Array, ObjectHandler) ->
+decode_array(Text, Array, Value, ObjectHandler) ->
     case get_token(Text) of
-        {exit_array, NextText} ->
-            {lesson3_lists:reverse(Array), NextText};
-        {comma, RestText} ->
-            decode_array(RestText, Array, ObjectHandler);
-        {value, Value, RestText} ->
-            decode_array(RestText, [Value | Array], ObjectHandler);
-        {enter_array, RestText} ->
+        {value, Val, RestText} when Value =:= no_value ->
+            decode_array(RestText, Array, Val, ObjectHandler);
+        {enter_array, RestText} when Value =:= no_value ->
             {NestedArray, NextText} = decode_array(RestText, ObjectHandler),
-            decode_array(NextText, [NestedArray | Array], ObjectHandler);
-        {enter_object, RestText} ->
+            decode_array(NextText, Array, NestedArray, ObjectHandler);
+        {enter_object, RestText} when Value =:= no_value ->
             {NestedObject, NextText} = decode_object(RestText, ObjectHandler),
-            decode_array(NextText, [NestedObject | Array], ObjectHandler)
+            decode_array(NextText, Array, NestedObject, ObjectHandler);
+        {comma, RestText} when Value =/= no_value ->
+            decode_array(RestText, [Value | Array], no_value, ObjectHandler);
+        {exit_array, NextText} when Value =/= no_value ->
+            {lesson3_lists:reverse([Value | Array]), NextText};
+        {exit_array, NextText} when Value =:= no_value ->
+            {lesson3_lists:reverse(Array), NextText}
     end.
 
 %% ----------------------------------------------------------------------------
