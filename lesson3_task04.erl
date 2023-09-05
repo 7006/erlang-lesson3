@@ -84,7 +84,7 @@ decode_array(Text, Array, ObjectHandler) ->
 %% ----------------------------------------------------------------------------
 get_token(Text) ->
     case Text of
-        <<ObjectHandler, RestText/binary>> when ?is_whitespace(ObjectHandler) ->
+        <<C, RestText/binary>> when ?is_whitespace(C) ->
             get_token(RestText);
         <<"{", RestText/binary>> ->
             {enter_object, RestText};
