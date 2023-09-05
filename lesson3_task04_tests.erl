@@ -121,7 +121,7 @@ decode_test_() ->
 
 t(Comment, Expected) ->
     Text = read_json_document(Comment),
-    Test = ?_assertEqual(Expected, lesson3_task04:decode(Text)),
+    Test = ?_assertEqual(Expected, lesson3_task04:decode(Text, proplists)),
     {Comment, Test}.
 
 read_json_document(Comment) ->
