@@ -5,7 +5,7 @@
 -export([
     new/0,
     put/3,
-    done/3
+    done/1
 ]).
 
 new() ->
