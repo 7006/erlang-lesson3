@@ -15,8 +15,8 @@ decode(Text, map) ->
     decode(Text, lesson3_task04_object_handler_map);
 decode(Text, ObjectHandler) ->
     case get_token(Text) of
-        {value, V, <<>>} ->
-            V;
+        {value, Value, <<>>} ->
+            Value;
         {enter_object, RestText} ->
             {Object, <<>>} = decode_object(RestText, ObjectHandler),
             Object;
