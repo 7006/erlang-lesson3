@@ -4,7 +4,7 @@
 
 -define(is_whitespace(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).
 
--define(is_digit(C), (C =:= $- orelse C >= $0 andalso C =< $9)).
+-define(is_digit(C), (C >= $0 andalso C =< $9)).
 
 %% Написати парсер JSON
 %% має вміти працювати з map
@@ -108,7 +108,7 @@ get_token(Text) ->
             {value, null, RestText};
         <<$", RestText/binary>> ->
             get_string_token(RestText);
-        <<C, _/binary>> when ?is_digit(C) ->
+        <<C, _/binary>> when C =:= $-; ?is_digit(C) ->
             get_number_token(Text)
     end.
 

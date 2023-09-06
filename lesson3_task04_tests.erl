@@ -233,19 +233,31 @@ decode_test_() ->
                     ]
                 }
             ]
-        })
+        }),
+        t_invalid(map, "number double fraction"),
+        t_invalid(map, "number double sign")
     ].
 
 t(ObjectHandler, Description, Expected) ->
     Comment = string:join(["<", atom_to_list(ObjectHandler), "> ", Description], ""),
+    JsonDocument = read_json_document(Description, "json_documents"),
     Test = ?_assertEqual(
         Expected,
-        lesson3_task04:decode(read_json_document(Description), ObjectHandler)
+        lesson3_task04:decode(JsonDocument, ObjectHandler)
     ),
     {Comment, Test}.
 
-read_json_document(Description) ->
+t_invalid(ObjectHandler, Description) ->
+    Comment = string:join(["<", atom_to_list(ObjectHandler), "> ", Description], ""),
+    InvalidJsonDocument = read_json_document(Description, "json_documents/_invalid"),
+    Test = ?_assertError(
+        _,
+        lesson3_task04:decode(InvalidJsonDocument, ObjectHandler)
+    ),
+    {Comment, Test}.
+
+read_json_document(Description, Dirname) ->
     Basename = string:join(string:replace(Description, " ", "_", all), ""),
-    Filename = string:join(["json_documents", "/", Basename, ".", "json"], ""),
+    Filename = string:join([Dirname, "/", Basename, ".", "json"], ""),
     {ok, Json} = file:read_file(Filename),
     Json.
