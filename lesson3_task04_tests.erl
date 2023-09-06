@@ -235,7 +235,17 @@ decode_test_() ->
             ]
         }),
         t_invalid(map, "number double fraction"),
-        t_invalid(map, "number double sign")
+        t_invalid(map, "number double sign"),
+        t_invalid(map, "array comma"),
+        t_invalid(map, "array close bracket"),
+        t_invalid(map, "array open bracket"),
+        t_invalid(map, "array open curly bracket"),
+        t_invalid(map, "array close curly bracket"),
+        t_invalid(map, "object colon"),
+        t_invalid(map, "object colon value"),
+        t_invalid(map, "object colon key"),
+        t_invalid(map, "object colon key array"),
+        t_invalid(map, "object colon key object")
     ].
 
 t(ObjectHandler, Description, Expected) ->
