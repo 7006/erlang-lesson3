@@ -36,7 +36,7 @@ decode_object(Text, Object, Key, Value, ObjectHandler) ->
     case get_token(Text) of
         {value, K, RestText} when Key =:= no_key, Value =:= no_value ->
             decode_object(RestText, Object, K, no_value, ObjectHandler);
-        {colon, RestText} when Key =/= no_key ->
+        {colon, RestText} when Key =/= no_key, Value =:= no_value ->
             decode_object(RestText, Object, Key, no_value, ObjectHandler);
         {value, Val, RestText} when Key =/= no_key, Value =:= no_value ->
             decode_object(RestText, Object, Key, Val, ObjectHandler);
