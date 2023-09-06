@@ -1,9 +1,9 @@
-.PHONY: check-json-documents
-check-json-documents:
+.PHONY: syntax-check-json-documents
+syntax-check-json-documents:
 	set -e; \
 	for FILE in $$(ls json_documents/*.json | sort); \
 	do \
-		echo check json document $$FILE; \
+		echo syntax check json document $$FILE; \
 		echo ; \
 		jq . $$FILE; \
 	done
