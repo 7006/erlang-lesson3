@@ -20,7 +20,7 @@ jobs:
           version-file: .github/workflows/.tool-versions
 
       - name: Syntax check of json documents used to test the json decoder
-        run: make check-json-documents
+        run: make syntax-check-json-documents
 
       - name: Ensure code formatted
         run: rebar3 fmt --check
