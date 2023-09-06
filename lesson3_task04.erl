@@ -2,7 +2,7 @@
 
 -export([decode/2]).
 
--define(is_whitespace(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n)).
+-define(is_whitespace(C), (C =:= $\s orelse C =:= $\t orelse C =:= $\n orelse C =:= $\r)).
 
 -define(is_digit(C), (C >= $0 andalso C =< $9)).
 
