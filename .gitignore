@@ -17,5 +17,5 @@ _build/
 _checkouts/
 
 # replit IDE
-.replt
+.replit
 replit.nix
