@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  test:
+    name: Test on Erlang/OTP
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout git repo
+        uses: actions/checkout@v3
+
+      - name: Install Erlang/OTP
+        uses: erlef/setup-beam@v1.16.0
+        with:
+          version-type: strict
+          version-file: .github/workflows/.tool-versions
+
+      - name: Syntax check of json documents used to test the json decoder
+        run: make syntax-check-json-documents
+
+      - name: Ensure code formatted
+        run: rebar3 fmt --check
+
+      - name: Run eunit tests
+        run: rebar3 eunit
