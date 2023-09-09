@@ -120,25 +120,9 @@ get_token(Text) ->
         <<"null", RestText/binary>> ->
             {value, null, RestText};
         <<$', RestText/binary>> ->
-            get_1_quote_string_token(RestText);
-        <<$", RestText/binary>> ->
             get_string_token(RestText);
         <<C, _/binary>> when C =:= $-; ?is_digit(C) ->
             get_number_token(Text)
-    end.
-
-%% ----------------------------------------------------------------------------
-%% get_string_token
-%% ----------------------------------------------------------------------------
-get_1_quote_string_token(Text) ->
-    get_1_quote_string_token(Text, <<>>).
-
-get_1_quote_string_token(Text, Chars) ->
-    case Text of
-        <<$', RestText/binary>> ->
-            {value, Chars, RestText};
-        <<Char/utf8, RestText/binary>> ->
-            get_1_quote_string_token(RestText, <<Chars/binary, Char/utf8>>)
     end.
 
 %% ----------------------------------------------------------------------------
@@ -149,7 +133,7 @@ get_string_token(Text) ->
 
 get_string_token(Text, Chars) ->
     case Text of
-        <<$", RestText/binary>> ->
+        <<$', RestText/binary>> ->
             {value, Chars, RestText};
         <<Char/utf8, RestText/binary>> ->
             get_string_token(RestText, <<Chars/binary, Char/utf8>>)
