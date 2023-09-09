@@ -76,9 +76,9 @@ decode_array(Text, Array, Value, ObjectHandler) ->
         {comma, RestText} when Value =/= no_value ->
             decode_array(RestText, [Value | Array], no_value, ObjectHandler);
         {exit_array, NextText} when Value =/= no_value ->
-            {lesson3_lists:reverse([Value | Array]), NextText};
+            {reverse([Value | Array]), NextText};
         {exit_array, NextText} when Value =:= no_value ->
-            {lesson3_lists:reverse(Array), NextText}
+            {reverse(Array), NextText}
     end.
 
 %% ----------------------------------------------------------------------------
@@ -163,3 +163,14 @@ get_number_token(Text, Sign, Number, Decimal) ->
         <<RestText/binary>> when Decimal =:= no_fraction ->
             {value, Sign * Number, RestText}
     end.
+
+%% ----------------------------------------------------------------------------
+%% reverse
+%% ----------------------------------------------------------------------------
+reverse(L) ->
+    reverse(L, []).
+
+reverse([H | T], Acc) ->
+    reverse(T, [H | Acc]);
+reverse([], Acc) ->
+    Acc.

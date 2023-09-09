@@ -15,4 +15,13 @@ put(Key, Value, Object) ->
     [{Key, Value} | Object].
 
 done(Object) ->
-    lesson3_lists:reverse(Object).
+    reverse(Object).
+
+reverse(L) ->
+    reverse(L, []).
+
+reverse([H | T], Acc) ->
+    reverse(T, [H | Acc]);
+reverse([], Acc) ->
+    Acc.
+
