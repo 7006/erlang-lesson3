@@ -13,68 +13,68 @@ decode(Text, proplists) ->
     decode(Text, lesson3_task4_object_handler_proplists);
 decode(Text, map) ->
     decode(Text, lesson3_task4_object_handler_map);
-decode(Text, ObjectHandler) ->
+decode(Text, Format) ->
     case get_token(Text) of
         {value, Value, <<>>} ->
             Value;
         {enter_object, RestText} ->
-            {Object, <<>>} = decode_object(RestText, ObjectHandler),
+            {Object, <<>>} = decode_object(RestText, Format),
             Object;
         {enter_array, RestText} ->
-            {Array, <<>>} = decode_array(RestText, ObjectHandler),
+            {Array, <<>>} = decode_array(RestText, Format),
             Array
     end.
 
 %% ----------------------------------------------------------------------------
 %% decode_object
 %% ----------------------------------------------------------------------------
-decode_object(Text, ObjectHandler) ->
-    Object = ObjectHandler:new(),
-    decode_object(Text, Object, no_key, no_value, ObjectHandler).
+decode_object(Text, Format) ->
+    Object = Format:new(),
+    decode_object(Text, Object, no_key, no_value, Format).
 
-decode_object(Text, Object, Key, Value, ObjectHandler) ->
+decode_object(Text, Object, Key, Value, Format) ->
     case get_token(Text) of
         {value, K, RestText} when Key =:= no_key, Value =:= no_value ->
-            decode_object(RestText, Object, K, no_value, ObjectHandler);
+            decode_object(RestText, Object, K, no_value, Format);
         {colon, RestText} when Key =/= no_key, Value =:= no_value ->
-            decode_object(RestText, Object, Key, no_value, ObjectHandler);
+            decode_object(RestText, Object, Key, no_value, Format);
         {value, Val, RestText} when Key =/= no_key, Value =:= no_value ->
-            decode_object(RestText, Object, Key, Val, ObjectHandler);
+            decode_object(RestText, Object, Key, Val, Format);
         {enter_array, RestText} when Key =/= no_key, Value =:= no_value ->
-            {Array, NextText} = decode_array(RestText, ObjectHandler),
-            decode_object(NextText, Object, Key, Array, ObjectHandler);
+            {Array, NextText} = decode_array(RestText, Format),
+            decode_object(NextText, Object, Key, Array, Format);
         {enter_object, RestText} when Key =/= no_key, Value =:= no_value ->
-            {NestedObject, NextText} = decode_object(RestText, ObjectHandler),
-            decode_object(NextText, Object, Key, NestedObject, ObjectHandler);
+            {NestedObject, NextText} = decode_object(RestText, Format),
+            decode_object(NextText, Object, Key, NestedObject, Format);
         {comma, RestText} when Key =/= no_key, Value =/= no_value ->
-            NextObject = ObjectHandler:put(Key, Value, Object),
-            decode_object(RestText, NextObject, no_key, no_value, ObjectHandler);
+            NextObject = Format:put(Key, Value, Object),
+            decode_object(RestText, NextObject, no_key, no_value, Format);
         {exit_object, RestText} when Key =:= no_key, Value =:= no_value ->
             {Object, RestText};
         {exit_object, RestText} when Key =/= no_key, Value =/= no_value ->
-            NextObject = ObjectHandler:put(Key, Value, Object),
-            NextObject2 = ObjectHandler:done(NextObject),
+            NextObject = Format:put(Key, Value, Object),
+            NextObject2 = Format:done(NextObject),
             {NextObject2, RestText}
     end.
 
 %% ----------------------------------------------------------------------------
 %% decode_array
 %% ----------------------------------------------------------------------------
-decode_array(Text, ObjectHandler) ->
-    decode_array(Text, [], no_value, ObjectHandler).
+decode_array(Text, Format) ->
+    decode_array(Text, [], no_value, Format).
 
-decode_array(Text, Array, Value, ObjectHandler) ->
+decode_array(Text, Array, Value, Format) ->
     case get_token(Text) of
         {value, Val, RestText} when Value =:= no_value ->
-            decode_array(RestText, Array, Val, ObjectHandler);
+            decode_array(RestText, Array, Val, Format);
         {enter_array, RestText} when Value =:= no_value ->
-            {NestedArray, NextText} = decode_array(RestText, ObjectHandler),
-            decode_array(NextText, Array, NestedArray, ObjectHandler);
+            {NestedArray, NextText} = decode_array(RestText, Format),
+            decode_array(NextText, Array, NestedArray, Format);
         {enter_object, RestText} when Value =:= no_value ->
-            {NestedObject, NextText} = decode_object(RestText, ObjectHandler),
-            decode_array(NextText, Array, NestedObject, ObjectHandler);
+            {NestedObject, NextText} = decode_object(RestText, Format),
+            decode_array(NextText, Array, NestedObject, Format);
         {comma, RestText} when Value =/= no_value ->
-            decode_array(RestText, [Value | Array], no_value, ObjectHandler);
+            decode_array(RestText, [Value | Array], no_value, Format);
         {exit_array, NextText} when Value =/= no_value ->
             {reverse([Value | Array]), NextText};
         {exit_array, NextText} when Value =:= no_value ->
