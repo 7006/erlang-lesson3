@@ -4,6 +4,20 @@
 
 decode_test_() ->
     [
+        {
+            "1 quote key-string",
+            ?_assertEqual(
+                #{<<"key">> => <<"value">>},
+                lesson3_task4:decode(<<"{'key': 'value'}">>, map)
+            )
+        },
+        {
+            "1 quote key-array",
+            ?_assertEqual(
+                #{<<"key">> => [<<"el1">>, <<"el2">>]},
+                lesson3_task4:decode(<<"{'key': ['el1', 'el2']}">>, map)
+            )
+        },
         t(proplists, "null", null),
         t(proplists, "boolean true", true),
         t(proplists, "boolean false", false),
