@@ -1,4 +1,4 @@
--module(lesson3_task04_tests).
+-module(lesson3_task4_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -253,7 +253,7 @@ t(ObjectHandler, Description, Expected) ->
     JsonDocument = read_json_document(Description, "json_documents"),
     Test = ?_assertEqual(
         Expected,
-        lesson3_task04:decode(JsonDocument, ObjectHandler)
+        lesson3_task4:decode(JsonDocument, ObjectHandler)
     ),
     {Comment, Test}.
 
@@ -262,7 +262,7 @@ t_invalid(ObjectHandler, Description) ->
     InvalidJsonDocument = read_json_document(Description, "json_documents/_invalid"),
     Test = ?_assertError(
         _,
-        lesson3_task04:decode(InvalidJsonDocument, ObjectHandler)
+        lesson3_task4:decode(InvalidJsonDocument, ObjectHandler)
     ),
     {Comment, Test}.
 

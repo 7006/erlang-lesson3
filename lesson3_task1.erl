@@ -1,4 +1,4 @@
--module(lesson3_task01).
+-module(lesson3_task1).
 
 -export([first_word/1]).
 

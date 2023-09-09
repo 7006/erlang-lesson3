@@ -1,4 +1,4 @@
--module(lesson3_task03_tests).
+-module(lesson3_task3_tests).
 
 -include_lib("eunit/include/eunit.hrl").
 
@@ -14,7 +14,7 @@ split_test_() ->
                     <<"Col4">>,
                     <<"Col5">>
                 ],
-                lesson3_task03:split(
+                lesson3_task3:split(
                     <<"Col1-:-Col2-:-Col3-:-Col4-:-Col5">>,
                     "-:-"
                 )
@@ -30,7 +30,7 @@ split_test_() ->
                     <<"Стовпчик4"/utf8>>,
                     <<"Стовпчик5"/utf8>>
                 ],
-                lesson3_task03:split(
+                lesson3_task3:split(
                     <<"Стовпчик1-:-Стовпчик2-:-Стовпчик3-:-Стовпчик4-:-Стовпчик5"/utf8>>,
                     "-:-"
                 )
@@ -129,6 +129,6 @@ t(Comment, #{text := Text, delimiter := Delimiter}) ->
         Comment,
         ?_assertEqual(
             string:split(Text, Delimiter, all),
-            lesson3_task03:split(Text, Delimiter)
+            lesson3_task3:split(Text, Delimiter)
         )
     }.

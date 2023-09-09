@@ -1,6 +1,6 @@
--module(lesson3_task04_object_handler_map).
+-module(lesson3_task4_object_handler_map).
 
--behaviour(lesson3_task04_object_handler).
+-behaviour(lesson3_task4_object_handler).
 
 -export([
     new/0,

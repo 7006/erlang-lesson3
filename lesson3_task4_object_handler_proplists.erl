@@ -1,6 +1,6 @@
--module(lesson3_task04_object_handler_proplists).
+-module(lesson3_task4_object_handler_proplists).
 
--behaviour(lesson3_task04_object_handler).
+-behaviour(lesson3_task4_object_handler).
 
 -export([
     new/0,

@@ -1,4 +1,4 @@
--module(lesson3_task04_object_handler).
+-module(lesson3_task4_object_handler).
 
 -callback new() -> term().
 

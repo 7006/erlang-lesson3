@@ -1,4 +1,4 @@
--module(lesson3_task04).
+-module(lesson3_task4).
 
 -export([decode/2]).
 
@@ -10,9 +10,9 @@
 %% має вміти працювати з map
 %% має вміти працювати з proplists
 decode(Text, proplists) ->
-    decode(Text, lesson3_task04_object_handler_proplists);
+    decode(Text, lesson3_task4_object_handler_proplists);
 decode(Text, map) ->
-    decode(Text, lesson3_task04_object_handler_map);
+    decode(Text, lesson3_task4_object_handler_map);
 decode(Text, ObjectHandler) ->
     case get_token(Text) of
         {value, Value, <<>>} ->

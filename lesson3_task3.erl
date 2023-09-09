@@ -1,4 +1,4 @@
--module(lesson3_task03).
+-module(lesson3_task3).
 
 -export([split/2]).
 
