@@ -9,11 +9,7 @@
 %% Написати парсер JSON
 %% має вміти працювати з map
 %% має вміти працювати з proplists
-decode(Text, proplists) ->
-    decode(Text, lesson3_task4_object_handler_proplists);
-decode(Text, map) ->
-    decode(Text, lesson3_task4_object_handler_map);
-decode(Text, Format) ->
+decode(Text, Format) when Format =:= map; Format =:= proplists ->
     case get_token(Text) of
         {value, Value, <<>>} ->
             Value;
@@ -29,7 +25,13 @@ decode(Text, Format) ->
 %% decode_object
 %% ----------------------------------------------------------------------------
 decode_object(Text, Format) ->
-    Object = Format:new(),
+    Object =
+        case Format of
+            map ->
+                #{};
+            proplists ->
+                []
+        end,
     decode_object(Text, Object, no_key, no_value, Format).
 
 decode_object(Text, Object, Key, Value, Format) ->
@@ -47,14 +49,25 @@ decode_object(Text, Object, Key, Value, Format) ->
             {NestedObject, NextText} = decode_object(RestText, Format),
             decode_object(NextText, Object, Key, NestedObject, Format);
         {comma, RestText} when Key =/= no_key, Value =/= no_value ->
-            NextObject = Format:put(Key, Value, Object),
+            NextObject =
+                case Format of
+                    map ->
+                        Object#{Key => Value};
+                    proplists ->
+                        [{Key, Value} | Object]
+                end,
             decode_object(RestText, NextObject, no_key, no_value, Format);
         {exit_object, RestText} when Key =:= no_key, Value =:= no_value ->
             {Object, RestText};
         {exit_object, RestText} when Key =/= no_key, Value =/= no_value ->
-            NextObject = Format:put(Key, Value, Object),
-            NextObject2 = Format:done(NextObject),
-            {NextObject2, RestText}
+            NextObject =
+                case Format of
+                    map ->
+                        Object#{Key => Value};
+                    proplists ->
+                        reverse([{Key, Value} | Object])
+                end,
+            {NextObject, RestText}
     end.
 
 %% ----------------------------------------------------------------------------
