@@ -9,7 +9,7 @@
 %% Написати парсер JSON
 %% має вміти працювати з map
 %% має вміти працювати з proplists
-decode(Text, Format) when Format =:= map; Format =:= proplists ->
+decode(Text, Format) when Format =:= map; Format =:= proplist ->
     {Result, LastText} =
         case get_token(Text) of
             {value, Value, RestText} ->
@@ -30,7 +30,7 @@ decode_object(Text, Format) ->
         case Format of
             map ->
                 #{};
-            proplists ->
+            proplist ->
                 []
         end,
     decode_object(Text, Object, no_key, no_value, Format).
@@ -54,7 +54,7 @@ decode_object(Text, Object, Key, Value, Format) ->
                 case Format of
                     map ->
                         Object#{Key => Value};
-                    proplists ->
+                    proplist ->
                         [{Key, Value} | Object]
                 end,
             decode_object(RestText, NextObject, no_key, no_value, Format);
@@ -65,7 +65,7 @@ decode_object(Text, Object, Key, Value, Format) ->
                 case Format of
                     map ->
                         Object#{Key => Value};
-                    proplists ->
+                    proplist ->
                         reverse([{Key, Value} | Object])
                 end,
             {NextObject, RestText}
