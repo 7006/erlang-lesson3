@@ -10,16 +10,17 @@
 %% має вміти працювати з map
 %% має вміти працювати з proplists
 decode(Text, Format) when Format =:= map; Format =:= proplists ->
-    case get_token(Text) of
-        {value, Value, <<>>} ->
-            Value;
-        {enter_object, RestText} ->
-            {Object, <<>>} = decode_object(RestText, Format),
-            Object;
-        {enter_array, RestText} ->
-            {Array, <<>>} = decode_array(RestText, Format),
-            Array
-    end.
+    {Result, LastText} =
+        case get_token(Text) of
+            {value, Value, RestText} ->
+                {Value, RestText};
+            {enter_object, RestText} ->
+                decode_object(RestText, Format);
+            {enter_array, RestText} ->
+                decode_array(RestText, Format)
+        end,
+    {end_of_text} = get_token(LastText),
+    Result.
 
 %% ----------------------------------------------------------------------------
 %% decode_object
@@ -122,7 +123,9 @@ get_token(Text) ->
         <<$', RestText/binary>> ->
             get_string_token(RestText);
         <<C, _/binary>> when C =:= $-; ?is_digit(C) ->
-            get_number_token(Text)
+            get_number_token(Text);
+        <<>> ->
+            {end_of_text}
     end.
 
 %% ----------------------------------------------------------------------------
